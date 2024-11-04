@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<program name="炸寒單">
+<videorect name="影片" x="22" y="22" width="204" height="121" src=""></videorect>
+<imagerect name="圖片" x="33" y="324" width="181" height="127" src=""></imagerect>
+</program>
+</config>

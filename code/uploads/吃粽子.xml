@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<program name="吃粽子">
+<textrect name="跑馬燈" x="486" y="74" width="260" height="59" src=""></textrect>
+<imagerect name="圖片" x="0" y="0" width="320" height="167" src="static\uploads\10.jpg"></imagerect>
+<videorect name="影片" x="475" y="274" width="329" height="179" src="static\uploads\10.mp4"></videorect>
+</program>
+</config>

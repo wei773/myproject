@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>用戶列表</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* 基本樣式 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            /* 设置最大宽度 */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 0px solid #ddd;
+            padding: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* 隱藏主選單 */
+        .drop-down-menu {
+            border: #ccc;
+            display: flex;
+            flex-wrap: wrap;
+            list-style-type: none;
+            justify-content: center;
+            font-size: 24px;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .drop-down-menu li {
+            position: relative;
+            white-space: nowrap;
+            border-right: none;
+            margin-right: 10px;
+            margin: 20px;
+            border-bottom: 0px solid #555;
+        }
+
+        .drop-down-menu li a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .drop-down-menu li a:hover {
+            background-color: #ef5c28;
+        }
+
+        .drop-down-menu ul li {
+            border-bottom: #ccc;
+        }
+
+        /* 漢堡選單樣式 */
+        .hamburger-menu {
+            width: 100%;
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+        }
+
+        .submenu {
+            display: none;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            z-index: 1000;
+            flex-direction: column;
+
+        }
+
+        .submenu li {
+            text-align: left;
+            /* 文字靠左對齊 */
+            font-size: 20px;
+            /* 調整文字大小 */
+            padding: 0 10px;
+            /* 調整內邊距 */
+            justify-content: flex-start;
+        }
+
+        .drop-down-menu>li:hover .submenu {
+            display: block;
+            /* Show submenu on hover */
+        }
+
+        /* 響應式樣式 */
+        @media only screen and (max-width: 576px) {
+            .hamburger-menu {
+                display: block;
+                /* 顯示漢堡選單 */
+            }
+
+            .drop-down-menu {
+                display: none;
+                /* 初始隱藏主選單 */
+                flex-direction: column;
+                top: 50px;
+                left: 0;
+                width: 100%;
+                z-index: 1;
+                text-align: center;
+            }
+
+            .submenu {
+                display: none;
+                /* 初始隱藏子選單 */
+                flex-direction: column;
+                position: relative;
+            }
+
+            .dropdown:hover .submenu {
+                display: flex;
+                border: 1px solid #ddd;
+                /* 顯示子選單 */
+            }
+
+            th,
+            td {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            th::before,
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 15px;
+                font-weight: bold;
+                white-space: nowrap;
+                text-align: left;
+            }
+
+            td::before {
+                text-align: left;
+            }
+        }
+
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .hamburger-menu {
+                display: block;
+                /* 顯示漢堡選單 */
+            }
+
+            .drop-down-menu {
+                display: none;
+                /* 初始隱藏主選單 */
+                flex-direction: column;
+                top: 50px;
+                left: 0;
+                width: 100%;
+                z-index: 1;
+                text-align: center;
+            }
+
+            .submenu {
+                display: none;
+                /* 初始隱藏子選單 */
+                flex-direction: column;
+                position: relative;
+            }
+
+            .dropdown:hover .submenu {
+                display: flex;
+                border: 1px solid #ddd;
+                /* 顯示子選單 */
+            }
+
+            th,
+            td {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            th::before,
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 15px;
+                font-weight: bold;
+                white-space: nowrap;
+                text-align: left;
+            }
+
+            td::before {
+                text-align: left;
+            }
+        }
+
+        @media only screen and (min-width: 1200px) {
+            .drop-down-menu {
+                display: flex;
+                /* 在大螢幕上顯示主選單 */
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            .drop-down-menu {
+                display: flex;
+                /* 在大螢幕上顯示主選單 */
+            }
+
+            th,
+            td {
+                white-space: nowrap;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .hamburger-menu {
+                display: none;
+            }
+
+            .drop-down-menu {
+                display: flex;
+                flex-direction: row;
+            }
+
+            th,
+            td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<script>
+    function toggleMenu() {
+        var menu = document.querySelector('.drop-down-menu');
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'block';
+        }
+    }
+    function adjustMenuDisplay() {
+        var menu = document.querySelector('.drop-down-menu');
+        var hamburgerMenu = document.querySelector('.hamburger-menu');
+
+        // 如果視窗寬度大於 768px，顯示主選單，隱藏漢堡選單
+        if (window.innerWidth > 768) {
+            menu.style.display = 'flex';
+            hamburgerMenu.style.display = 'none';
+        } else {
+            // 如果視窗寬度小於或等於 768px，隱藏主選單，顯示漢堡選單
+            menu.style.display = 'none';
+            hamburgerMenu.style.display = 'block';
+        }
+    }
+
+    // 當視窗尺寸改變時呼叫 adjustMenuDisplay 函式
+    window.addEventListener('resize', adjustMenuDisplay);
+
+    // 當頁面載入時也呼叫一次 adjustMenuDisplay 函式來初始化樣式
+    window.addEventListener('load', adjustMenuDisplay);
+</script>
+
+<body>
+    <header id="topNav">
+        <div class="menu-container">
+            <div class="hamburger-menu" onclick="toggleMenu()">&#9776;</div>
+            <ul class="drop-down-menu">
+                <li><a href="/index">首頁</a></li>
+                <li><a href="/file">素材管理</a></li>
+                <li class="dropdown">
+                    <a href="/view">節目管理</a>
+                    <ul class="submenu">
+                        <li><a href="/interact">互動任務</a></li>
+                        <li><a href="/interrupt">插播任務</a></li>
+                    </ul>
+                </li>
+                <li><a href="/terminal">終端管理</a></li>
+                <li><a href="/user">用戶管理</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+        <table class="table" style="width: 1000px;margin: 100px auto;">
+            <thead>
+                <tr style="text-align: center;">
+                    <th scope="col">姓名</th>
+                    <th scope="col">帳號</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">權限</th>
+                    <th scope="col">e-mail</th>
+                    <th scope="col">地址</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr style="text-align: center;">
+                    <td>{{user.username}}</td>
+                    <td>{{user.account}}</td>
+                    <td><a href="#">{{user.ip}}</a></td>
+                    <td>{{user.authority}}</td>
+                    <td>{{user.email}}</td>
+                    <td>
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ user.address }}" target="_blank">
+                            <img src="{{ url_for('static', filename='map.jpg') }}" class="icon" width="20px"
+                                height="20px" alt="Map Icon">
+                        </a>
+                        {{ user.address }}
+                    </td>
+                    <td>
+                        {% if show_edit %}
+                        <a href="{{ url_for('edit', username=user.username) }}" class="btn btn-danger">編輯</a>&nbsp;
+                        {% endif %}
+                        {% if show_delete and user != current_user %}
+                        <a href="{{ url_for('delete', username=user.username) }}" class="btn btn-danger">刪除</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="bottm-btn">
+        <div class="row" style="width: 1000px;margin: 10px auto">
+            <div class="col-4">
+                {% if show_add %}
+                <a href="/add" class="btn btn-danger">新增</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">登出</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

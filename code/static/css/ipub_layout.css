@@ -1,0 +1,90 @@
+@charset "utf-8";
+
+/* =====================            ===================== */
+
+.shujTb td {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 30px;
+    border-bottom: #dfdfdf solid 1px;
+}
+
+.shujTb2 td {
+    padding-left: 10px;
+}
+
+td {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+.rightMenu {
+    height: 40px;
+    padding: 10px 20px;
+
+}
+
+
+
+.rightMenu .right li {
+    float: right;
+    margin-left: 5px;
+}
+
+ul {
+    list-style: none outside none;
+}
+
+.rightMenu ul li {
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
+    color: #3e3e3e;
+}
+
+.rightMenu .rightMenuLong li {
+    width: 60px;
+    /*background: url(../images/rightMenuBtn.gif) no-repeat 0px -25px;*/
+}
+
+element.style {
+    float: left;
+    height: 20px;
+    margin: 0px;
+    padding-top: 5px;
+    padding-left: 3px;
+    padding-right: 1px;
+}
+
+div,
+table,
+li {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+div {
+    display: block;
+}
+
+.shujBt {
+    height: 35px;
+    line-height: 35px;
+    background: url(../images/shujBt.gif) repeat-x;
+}
+
+.page1 img {
+    margin-right: 15px;
+    cursor: pointer;
+    vertical-align: middle;
+    filter: alpha(opacity=60);
+    opacity: 0.6;
+}
+
+img,
+select {
+    vertical-align: middle;
+}

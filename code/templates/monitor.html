@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <title>電子看板平台</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<style>
+    ul ul,
+    ul {
+        list-style: none;
+        padding: 0 60px;
+        margin: 0;
+    }
+
+    ul.drop-down-menu {
+        border: #ccc;
+        display: flex;
+        flex-wrap: wrap;
+        /* Changed */
+        justify-content: center;
+        /* Added */
+        font-family: 'open Sans', Arial, sans-serif;
+        font-size: 24px;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    ul.drop-down-menu a {
+        background-color: #fff;
+        color: #333;
+        display: inline-block;
+        text-decoration: none;
+        padding: 0 30px;
+    }
+
+    ul.drop-down-menu a:hover {
+        background-color: #ef5c28;
+        color: #fff;
+    }
+
+    ul.drop-down-menu ul {
+        border: #ccc;
+        position: absolute;
+        z-index: 99;
+        left: 0;
+        top: 100%;
+        min-width: 10px;
+        display: none;
+    }
+
+    ul.drop-down-menu li {
+        position: relative;
+        white-space: nowrap;
+        border-right: #ccc;
+        /* Changed */
+        position: relative;
+        border-right: none;
+        /* Removed */
+    }
+
+    ul.drop-down-menu ul li {
+        border-bottom: #ccc;
+    }
+
+    ul.drop-down-menu ul li:last-child {
+        border-bottom: none;
+    }
+
+    ul.drop-down-menu>li {
+        float: none;
+        position: relative;
+        border-right: none;
+        margin-right: 10px;
+        margin: 5px;
+        /* Added some spacing between menu items */
+    }
+
+    ul.drop-down-menu li:hover>ul {
+        display: block;
+    }
+
+    ul.drop-down-menu ul ul {
+        z-index: 999;
+        top: 0;
+        left: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    @media only screen and (max-width: 768px) {
+        ul.drop-down-menu {
+            font-size: 20px;
+            /* Decrease font size for smaller screens */
+        }
+
+        ul.drop-down-menu>li {
+            margin-right: 15px;
+            /* Adjust spacing for smaller screens */
+        }
+
+        ul.drop-down-menu ul {
+            left: 0;
+            top: auto;
+            /* Adjust dropdown position for smaller screens */
+            min-width: 100%;
+            /* Ensure dropdowns span full width */
+        }
+
+        ul.drop-down-menu ul ul {
+            left: 100%;
+            top: 0;
+        }
+    }
+
+    .left_background li {
+
+        color: #333;
+        display: block;
+        padding: 0 150px;
+        text-decoration: none;
+        line-height: 40px;
+
+    }
+</style>
+
+<style type="text/css">
+    .left_background {
+        position: absolute;
+        left: 0px;
+        top: 50px;
+        width: 400px;
+        height: 787px;
+        margin: 0 auto;
+        background: #FFFFFF;
+        border-style: inset;
+    }
+
+    .right_background {
+        position: absolute;
+        left: 380px;
+        top: 50px;
+        width: 1015px;
+        height: 790px;
+        margin: 0 auto;
+        background: #FFFFFF;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+    }
+
+    .left_background a {
+        color: #FFFFFF;
+    }
+</style>
+
+<script>
+    function deleteSelectedRows() {
+        var form = document.getElementById("deleteForm");
+        var formData = new FormData(form);
+
+        // Send a request to the server to handle the deletion
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "delete_interrupt.php", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Handle the response from the server, if needed
+
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+
+        xhr.send(formData);
+    }
+    function deleteSelectedTask() {
+        var form = document.getElementById("task_form");
+        var formData = new FormData(form);
+
+        // Send a request to the server to handle the deletion
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "delete_interruptTask.php", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Handle the response from the server, if needed
+
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+
+        xhr.send(formData);
+    }
+</script>
+
+<body>
+        <ul class="drop-down-menu">
+
+            <li><a href="./index">首頁</a></li>
+            <li><a href="./file">素材管理</a></li>
+            <li><a href="./view">節目管理</a>
+                <ul>
+                    <li><a href="./interact">互動任務</a></li>
+                    <li><a href="./interrupt">插播任務</a></li>
+                </ul>
+            </li>
+            <li><a href="./terminal">終端管理</a></li>
+            <li><a href="./monitor">遠程監控</a>
+                <ul>
+                    <li><a href="./program.php">程式視圖</a></li>
+                    <li><a href="./firmware.php">韌體視圖</a></li>
+                    <li><a href="./inspect.php">巡查視圖</a></li>
+                </ul>
+            </li>
+            <li><a href="/user">用戶管理</a></li>
+        </ul>
+        <div class="main"></div>
+
+        <div class="mid1">
+
+            <div>
+                <div
+                    style="position: relative; width: 1400px; height: 840px;background: #333;; margin:10px auto;border-style: inset;">
+                    <div class="topMenu_background">
+                        <h3 style="color: #FFFFFF;font-size:22px">網路視圖</h3>
+
+                    </div>
+                    <div class="left_background hover">
+                        <div style="font-size:18px;width: 100%;cursor: pointer;background-color: aqua;text-align: center; height: 35px;"
+                            onclick="loadRoot()">根分組</div>
+                        <div id="folderList" style="background-color: #333;width:450px;height:600px;margin-top:0px;">
+                            
+                        </div>
+                    </div>
+                    <div>
+                        <div class="right_background">
+                            <form id="deleteForm" style="height: 120px;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="shujBt"
+                                    style="table-layout: fixed;text-align: left;background-color: #ccc;height: 40px;">
+                                    <tr>
+                                        <td class="first" style="width: auto; white-space: nowrap;">終端ID</td>
+                                        <td style="width: 200px;">終端名稱</td>
+                                        <td style="width: auto;">容量(可用/總共)</td>
+                                        <td style="width: 180px;">主機型號</td>
+                                        <td style="width: 120px;">解析度</td>
+                                        <td style="width: 100px;">當前網路</td>
+                                        <td style="width: 80px;">網路狀態</td>
+                                        <td style="width: 50px;">音量</td>
+                                    </tr>
+                                    
+                                </table>
+                            </form>
+
+                            <div class="rightBottomButton" style="margin-top: 539px;margin-left:20px;">
+                                <button onclick="addprogram();">格式化</button>
+
+
+                                <button onclick="loopprogram('clone')">重啟</button>
+
+
+                                <button onclick="loopprogram('edit')">待機</button>
+
+                                <button onclick="loopprogram('delete')">喚醒</button>
+
+                                <button onclick="loopprogram('up')" style="margin-left:100px ;">終端設定</button>
+
+                                <button onclick="loopprogram('down')">網路設定</button>
+
+                                <button onclick="loopprogram('toSequence')">終端升級</button>
+
+                                <button style="margin-left:10px ;" onClick="loopprogram('clear_schedule')">異常分析</button>
+
+                                <button onclick="loopprogram('down')">實時抓圖</button>
+
+                                <button onclick="loopprogram('down')">查看抓圖</button>
+
+                                <button onclick="loopprogram('down')">高級</button>
+                            </div>
+                            <div style="font-size:16px;padding-left:20px;padding-top: 10px;">
+                                以瀏覽器對終端機進行參數設定、重啟、待機、喚醒、截圖等操作。“格式化”操作僅刪除所有的資料內容, ，不會對終端系統的組態設定有影響。</div>
+
+                            <div class="bottomMenu"
+                                style="width: 100%;height: 35px;background-color: #ccc;margin-top: 5px;text-align:left;">
+                                <label style="cursor: pointer;"
+                                    onclick="return CheckHelper.checkAll('loopprogramId');return false;">全選</label> |
+                                <label style="cursor: pointer;"
+                                    onclick="return CheckHelper.reverseAll('loopprogramId');return false;">反選</label> |
+                                <label style="cursor: pointer;"
+                                    onclick="return CheckHelper.cleanAll('loopprogramId');return false;"
+                                    class="chk-cancle">取消</label>
+
+                                <a href="">
+                                    <img src="http://220.130.83.9:80/skins/default/images/refresh3.gif"
+                                        class="ref" /></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+</body>
+
+</html>

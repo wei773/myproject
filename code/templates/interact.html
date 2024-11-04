@@ -1,0 +1,2938 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>電子看板平台</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        /* 基本樣式 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            width: 100%;
+        }
+
+        .container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 隱藏主選單 */
+        .drop-down-menu {
+            border: #ccc;
+            display: flex;
+            flex-wrap: wrap;
+            list-style-type: none;
+            justify-content: center;
+            font-size: 24px;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .drop-down-menu li {
+            position: relative;
+            white-space: nowrap;
+            border-right: none;
+            margin-right: 10px;
+            margin: 20px;
+            border-bottom: 0px solid #555;
+        }
+
+        .drop-down-menu li a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .drop-down-menu li a:hover {
+            background-color: #ef5c28;
+        }
+
+        .drop-down-menu ul li {
+            border-bottom: #ccc;
+        }
+
+        /* 漢堡選單樣式 */
+        .hamburger-menu {
+            width: 100%;
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+        }
+
+        .submenu {
+            display: none;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            z-index: 1000;
+            flex-direction: column;
+
+        }
+
+        .submenu li {
+            text-align: left;
+            /* 文字靠左對齊 */
+            font-size: 20px;
+            /* 調整文字大小 */
+            padding: 0 10px;
+            /* 調整內邊距 */
+            justify-content: flex-start;
+        }
+
+        .drop-down-menu>li:hover .submenu {
+            display: block;
+            /* Show submenu on hover */
+        }
+
+        /* 響應式樣式 */
+        @media only screen and (max-width: 576px) {
+            .hamburger-menu {
+                display: block;
+                /* 顯示漢堡選單 */
+            }
+
+            .drop-down-menu {
+                display: none;
+                /* 初始隱藏主選單 */
+                flex-direction: column;
+                top: 50px;
+                left: 0;
+                width: 100%;
+                z-index: 1;
+                text-align: center;
+            }
+
+            .submenu {
+                display: none;
+                /* 初始隱藏子選單 */
+                flex-direction: column;
+                position: relative;
+            }
+
+            .dropdown:hover .submenu {
+                display: flex;
+                border: 1px solid #ddd;
+                /* 顯示子選單 */
+            }
+
+            .container {
+                flex-direction: column;
+                align-items: flex-start;
+                display: flex;
+                width: 100%;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .rightBottomButton {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .left_background {
+                min-width: 100%;
+            }
+        }
+
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .hamburger-menu {
+                display: block;
+                /* 顯示漢堡選單 */
+            }
+
+            .drop-down-menu {
+                display: none;
+                /* 初始隱藏主選單 */
+                flex-direction: column;
+                top: 50px;
+                left: 0;
+                width: 100%;
+                z-index: 1;
+                text-align: center;
+            }
+
+            .submenu {
+                display: none;
+                /* 初始隱藏子選單 */
+                flex-direction: column;
+                position: relative;
+            }
+
+            .dropdown:hover .submenu {
+                display: flex;
+                border: 1px solid #ddd;
+                /* 顯示子選單 */
+            }
+
+            .container {
+                flex-direction: column;
+                align-items: flex-start;
+                display: flex;
+                width: 100%;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            td,
+            th {
+                text-align: center;
+            }
+
+            .rightBottomButton {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .left_background {
+                min-width: 100%;
+            }
+        }
+
+        @media only screen and (min-width: 1200px) {
+            .drop-down-menu {
+                display: flex;
+                /* 在大螢幕上顯示主選單 */
+            }
+
+            .container {
+                flex-direction: row;
+                /* Horizontal layout for medium devices */
+            }
+
+            .left_background,
+            .right_background {
+                width: 50%;
+                /* Adjust the width to 50% for horizontal display */
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            .container {
+                flex-direction: row;
+                /* Horizontal layout for medium devices */
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            td,
+            th {
+                text-align: center;
+            }
+
+            .left_background,
+            .right_background {
+                width: 50%;
+                /* Adjust the width to 50% for horizontal display */
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .hamburger-menu {
+                display: none;
+            }
+
+            .drop-down-menu {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .container {
+                flex-direction: column;
+                /* Horizontal layout for medium devices and above */
+            }
+
+            .left_background,
+            .right_background {
+                width: 50%;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .left_background {
+                min-width: 100%;
+            }
+
+            td,
+            th {
+                text-align: center;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        .rightBottomButton {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+
+        }
+    </style>
+</head>
+<style>
+    .left_background li {
+        color: #333;
+        display: block;
+        padding: 0 150px;
+        text-decoration: none;
+        line-height: 40px;
+
+    }
+
+    .left_background a {
+        color: #FFFFFF;
+    }
+
+    .topMenu {
+        float: left;
+        padding-left: 140px;
+        margin-top: 10px;
+        height: 30px;
+        overflow: hidden;
+    }
+
+    .topMenu li {
+        width: 35px;
+        float: left;
+        display: block;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .topMenu li img {
+        vertical-align: middle;
+        filter: alpha(opacity=60);
+        opacity: 0.6;
+    }
+
+    .topMenu li:hover img {
+        vertical-align: middle;
+        filter: alpha(opacity=100);
+        opacity: 1;
+    }
+</style>
+<style type="text/css">
+    .left_background {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        background: #FFFFFF;
+        border-style: inset;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .right_background {
+        width: 100%;
+        max-width: 1015px;
+        height: auto;
+        background: #FFFFFF;
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .red-text {
+        color: red;
+    }
+
+    .white-text {
+        color: white;
+    }
+
+    .rect_btn {
+        width: 50px;
+        height: 21px;
+        padding: 0px;
+        text-align: center;
+        /* border: 1px solid blue; */
+        color: #000000;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 3px;
+        border-left-color: #6F6F6F;
+        border-right-color: #6F6F6F;
+        border-top-color: #6F6F6F;
+        border-bottom-color: #8E8E8E;
+        background-image: linear-gradient(#FEFEFE, #D9D9D9);
+        margin-bottom: 8px;
+    }
+
+    .btn_menu ul li {
+        background-color: #FFFFFF;
+        color: #fff;
+        height: 26px;
+        line-height: 26px;
+        border-bottom: 1px solid #CCC;
+        position: relative;
+    }
+
+    .btn_menu_arrow_item {
+        background-image: url(menu_arrow.png);
+        background-size: 5px 10px;
+        background-repeat: no-repeat;
+        background-position: 12px;
+    }
+
+    .edit_tool_bar {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        width: 600px;
+        height: 65px;
+        border: 1px solid #d3d3d3;
+        background-color: #C0C0C0;
+        color: #000000;
+        display: flex;
+        align-items: center;
+    }
+    .edit_tool_bar2 {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        width: 600px;
+        height: 80px;
+        border: 1px solid #d3d3d3;
+        background-color: #C0C0C0;
+        color: #000000;
+        display: flex;
+        align-items: center;
+    }
+    #modal1, #modal2 {
+        display: none; /* 默认隐藏 */
+        position: fixed; /* 固定位置 */
+        top: 50%; /* 居中 */
+        left: 50%; /* 居中 */
+        transform: translate(-50%, -50%); /* 实现居中 */
+        z-index: 9999; /* 确保模态框在最前方 */
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+</style>
+
+<script>
+    function sortTasks(order) {
+        var interact_task = document.querySelectorAll('#task-item');
+        var sortedTasks = Array.from(interact_task).sort(function (a, b) {
+            var taskIdA = parseInt(a.querySelector('.task-checkbox').value);
+            var taskIdB = parseInt(b.querySelector('.task-checkbox').value);
+            if (order === 'asc') {
+                return taskIdA - taskIdB;
+            } else {
+                return taskIdB - taskIdA;
+            }
+        });
+        var parent = interact_task[0].parentNode;
+        sortedTasks.forEach(function (task) {
+            parent.appendChild(task);
+        });
+    }
+    function toggleEditContent() {
+        var checkedCheckbox = document.querySelector('.interact-checkbox:checked');
+        if (!checkedCheckbox) {
+            alert('請先選擇要預覽的內容!');
+        } else {
+            const interact_name = checkedCheckbox.getAttribute('data-interact-name');
+            // Update the modal content with the program name
+            const resolution = checkedCheckbox.getAttribute('data-resolution'); // 获取解析度
+        
+            if (resolution) {
+                const dimensions = resolution.split('*'); // 假设解析度格式为 "1080*1920"
+                const width = parseInt(dimensions[0], 10);
+                const height = parseInt(dimensions[1], 10);
+
+                // 判断是横向还是纵向布局
+                if (width > height) {
+                    // 横向布局
+                    $('#editModal8').modal('show');
+                    document.getElementById('horizontal_content').textContent = interact_name;
+                    loadXMLfile2();
+                } else {
+                    // 纵向布局
+                    // Show the modal
+                    $('#editModal6').modal('show');
+                    document.getElementById('program_content').textContent = interact_name;
+                    loadXMLfile();
+                }
+            } else {
+                alert('解析度信息缺失，無法判斷布局！');
+            }
+        }
+    }
+    $(document).ready(function () {
+        // 讓模態框可以通過拖動移動
+        $(".modal").on('show.bs.modal', function () {
+            $(".modal-dialog").draggable({
+                handle: ".modal-header"
+            });
+        });
+    });
+    function updateProgramNameAndShowModal() {
+        // Find the checked checkbox
+        const checkedCheckbox = document.querySelector('.interact-checkbox:checked');
+
+        if (!checkedCheckbox) {
+            alert('請先選擇一個節目!');
+        } else {
+            const view_name = checkedCheckbox.getAttribute('data-interact-name');
+            const resolution = checkedCheckbox.getAttribute('data-resolution'); // 获取解析度
+        
+            if (resolution) {
+                const dimensions = resolution.split('*'); // 假设解析度格式为 "1080*1920"
+                const width = parseInt(dimensions[0], 10);
+                const height = parseInt(dimensions[1], 10);
+
+                // 判断是横向还是纵向布局
+                if (width > height) {
+                    // 横向布局
+                    showHorizontalLayout(view_name);
+                } else {
+                    // 纵向布局
+                    showVerticalLayout(view_name);
+                }
+            } else {
+                alert('解析度信息缺失，無法判斷布局！');
+            }
+        }
+    }
+</script>
+<script>
+    function showHorizontalLayout(view_name){
+        //const view_name = checkedCheckbox.getAttribute('data-view-name');
+        document.getElementById('horizontal_program_name').textContent = view_name;
+        $('#editModal7').modal('show');
+        fetchRectangles2(view_name);
+    }
+    function showVerticalLayout(view_name){
+        //const view_name = checkedCheckbox.getAttribute('data-view-name');
+        document.getElementById('vertical_program_name').textContent = view_name;
+        $('#editModal5').modal('show');
+        fetchRectangles(view_name);
+    }
+    function toggleMenus() {
+        var menu = document.querySelector('.drop-down-menu');
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'block';
+        }
+    }
+    function adjustMenuDisplay() {
+        var menu = document.querySelector('.drop-down-menu');
+        var hamburgerMenu = document.querySelector('.hamburger-menu');
+
+        // 如果視窗寬度大於 768px，顯示主選單，隱藏漢堡選單
+        if (window.innerWidth > 768) {
+            menu.style.display = 'flex';
+            hamburgerMenu.style.display = 'none';
+        } else {
+            // 如果視窗寬度小於或等於 768px，隱藏主選單，顯示漢堡選單
+            menu.style.display = 'none';
+            hamburgerMenu.style.display = 'block';
+        }
+    }
+
+    // 當視窗尺寸改變時呼叫 adjustMenuDisplay 函式
+    window.addEventListener('resize', adjustMenuDisplay);
+
+    // 當頁面載入時也呼叫一次 adjustMenuDisplay 函式來初始化樣式
+    window.addEventListener('load', adjustMenuDisplay);
+</script>
+<link rel="stylesheet" type="text/css" href="/static/css/view.css">
+<link type="text/css" href="/static/css/ipub_layout.css">
+
+<body>
+    <header id="topNav">
+        <div class="menu-container">
+            <div class="hamburger-menu" onclick="toggleMenus()">&#9776;</div>
+            <ul class="drop-down-menu">
+                <li><a href="/index">首頁</a></li>
+                <li><a href="/file">素材管理</a></li>
+                <li class="dropdown">
+                    <a href="/view">節目管理</a>
+                    <ul class="submenu">
+                        <li><a href="/interact">互動任務</a></li>
+                        <li><a href="/interrupt">插播任務</a></li>
+                    </ul>
+                </li>
+                <li><a href="/terminal">終端管理</a></li>
+                <li><a href="/user">用戶管理</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="container" id="container">
+        <div class="left_background">
+            <form id="task_form">
+                <div id="folderList" style="height: 637px; background-color: #333;margin-top: 0px;">
+                    {% for row in data %}
+                    <div id="task-item" style="color: red;">
+                        <input type="checkbox" name="task-checkbox" class="task-checkbox" value="{{ row.task_id }}">
+                        <label data-id="{{ row.task_id }}" class="task-name">{{row.task_name}}</label><br>
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
+            <div class="leftTopButtonBox" style="margin-top: 45px;text-align: center;">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal1">
+                    <font color="#FF0000">&#x25B4;</font>新增
+                </button>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal3">編輯</button>
+
+                <button type="button" class="btn btn-primary" id="deleteBtn">刪除</button>
+            </div>
+            <div class="leftBottomButtonBox" style="margin-top: 20px;text-align: center;">
+                <button type="button" class="btn btn-primary" onclick="sortTasks('desc')">遞減</button>
+
+                <button type="button" class="btn btn-primary" onclick="sortTasks('asc')">遞增</button>
+
+                {% if show_execute %}
+                <button type="button" class="btn btn-primary" id="audit">審核</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="right_background">
+            <form id="deleteForm" style="height: 120px;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="shujBt">
+                    <thead>
+                        <tr style="background-color: #ccc;height: 40px;">
+                            <th class="first" style="width: auto; white-space: nowrap;">播放狀態</th>
+                            <th style="width: 300px;">節目名稱</th>
+                            <th style="width: auto;">解析度</th>
+                            <th style="width: 160px;">編輯</th>
+                            <th style="width: 90px;">預覽</th>
+                        </tr>
+                    </thead>
+                    <tbody id="right_view">
+
+                    </tbody>
+                </table>
+            </form>
+            <div id="modal1" style="display:none;">
+                <h2>选择素材</h2>
+                <input type="hidden" id="selectedRectId1" name="rectId1">
+                <input type="file" id="fileInput1" accept="image/*, video/*">
+                <button onclick="saveToSrc()">应用</button>
+                <button onclick="closeModal()">取消</button>
+            </div>
+            <div id="modal2" style="display:none;">
+                <h2>选择素材</h2>
+                <input type="hidden" id="selectedRectId2" name="rectId2">
+                <input type="file" id="fileInput2" accept="image/*, video/*">
+                <button onclick="saveTohorizontal()">应用</button>
+                <button onclick="closeModal2()">取消</button>
+            </div>
+            <div class="rightBottomButton" style="margin-top: 563px;margin-left:20px;">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal2">
+                    <font color="#FF0000">&#x25B4;</font>新增
+                </button>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal4">編輯</button>
+
+                <button type="button" class="btn btn-primary" id="remove_right">刪除</button>
+
+                <button type="button" class="btn btn-primary" id="moveUp">上移</button>
+
+                <button type="button" class="btn btn-primary" id="moveDown">下移</button>
+            </div>
+            <div style="font-size:16px;padding-left:20px;padding-top: 10px;">
+                先在左側“新建”播放任務，然後在右側“新建”節目。任務“審核”後，將自動下載到已指定該播放任務的終端。一個播放任務內可建多個節目。</div>
+
+            <div class="bottomMenu"
+                style="width: 100%;height: 35px;background-color: #ccc;margin-top: 5px;text-align:left;">
+                <label style="cursor: pointer;"
+                    onclick="return CheckHelper.checkAll('loopprogramId');return false;">全選</label> |
+                <label style="cursor: pointer;"
+                    onclick="return CheckHelper.reverseAll('loopprogramId');return false;">反選</label> |
+                <label style="cursor: pointer;" onclick="return CheckHelper.cleanAll('loopprogramId');return false;"
+                    class="chk-cancle">取消</label>
+
+                <a href="">
+                    <img src="http://220.130.83.9:80/skins/default/images/refresh3.gif" class="ref" /></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal1" tabindex="-1" role="dialog" aria-labelledby="editModal1Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal1Label">新增任務</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/create_interactTask" method="post">
+                        <label for="task_name">任務名稱:</label>
+                        <input type="text" id="task_name" name="task_name" required><br>
+                        <label for="view_desc">任務描述:</label>
+                        <input type="text" id="task_desc" name="task_desc" required>
+                        <button type="submit" class="btn btn-primary">確定</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal2" tabindex="-1" role="dialog" aria-labelledby="editModal2Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal2Label">新增節目</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProgramForm">
+                        <label for="interact_name">節目名稱:</label>
+                        <input type="text" id="interact_name" name="interact_name" required><br>
+                        <label for="view_desc">節目描述:</label>
+                        <input type="text" id="interact_desc" name="interact_desc" required><br>
+                        <label for="resolution">解析度:</label>
+                        <select name="resolution" id="resolution">
+                            <option value="1920*1080">1920x1080</option>
+                            <option value="3840*2160">3840x2160</option>
+                            <option value="1080*1920">1080x1920</option>
+                            <option value="2160*6840">2160x6840</option>
+                        </select><br>
+                        <label for="task_id">選擇任務:</label>
+                        <select id="task_id" name="task_id" required>
+                            {% for row in data %}
+                            <option value="{{row.task_id}}">{{row.task_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary">確定</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal3" tabindex="-1" role="dialog" aria-labelledby="editModal3Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal3Label">編輯任務</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="name">任務名稱</label>
+                    <input type="text" id="name" required><br>
+                    <label for="view_desc">任務描述</label>
+                    <input type="text" id="view_desc" name="view_desc" required><br>
+                    <label>任務版本</label>
+                    <input type="text" id="task_time" readonly><br>
+                    <label>任務狀態</label>
+                    <input type="text" id="task_con" value="未審核"><br>
+                    <label for="task_size">任務大小</label>
+                    <input type="text" id="task_size"><br>
+                    <label for="">創建者</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" value="admin"><br>
+                    <button type="submit" class="btn btn-primary">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal4" tabindex="-1" role="dialog" aria-labelledby="editModal4Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal4Label">編輯節目</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label>節目名稱</label>
+                    <input type="text" id="selected_name"><br>
+                    <label for="view_desc">節目描述</label>
+                    <input type="text" id="view_desc" name="view_desc" required><br>
+                    <label>解析度&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="text" id="selected_resolution" readonly><br>
+                    <label for="task_con">播放狀態</label>
+                    <input type="text" id="task_con" value="正在播放" onclick="" required><br>
+                    <label for="">創建者</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" value="admin"><br>
+                    <button type="submit" class="btn btn-primary">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal5" tabindex="-1" role="dialog" aria-labelledby="editModal5Label"
+        aria-hidden="false">
+        <div class="modal-dialog" role="document" style="width: 1000px; height: 800px;">
+            <div class="modal-content" style="width: 1000px; height: 800px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal5Label">節目佈局</h5>
+                    <span
+                        style="color: #333;position: absolute;margin-top:-35px;margin-left:100px;">請點擊旁邊按鈕，可以編輯節目內容。</span>
+                    <input type="button" id="reset" value="重設"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:600px;"
+                        class="NFButton">
+                    <input type="button" id="save" onclick="saveToServer()" value="儲存"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:650px;"
+                        class="NFButton">
+                    <input type="button" id="update_vertical"  value="更新"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:700px;"
+                        class="NFButton">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <span style="color:#333;">當前節目:</span>&nbsp;<span id="vertical_program_name" style="color:#333"></span>
+                    </div>
+                    <div
+                        style="position:relative;margin-top:0px;left: 50px;width: 850px;height: 650px;background-color:#ffffff">
+                        <div id="left_scaleplate_div" class="left_scaleplate_div" style="position:absolute;">
+                            <img src="/static/images/left.png" alt="1920"
+                                style="margin-top:13px;margin-left:290px;margin-top: 21px;">
+                        </div>
+                        <div id="top_scaleplate_div" class="top_scaleplate_div"
+                            style="position:relative;color:#000000;">
+                            <img src="/static/images/top.png" alt="1080" style="margin-left:300px ;">
+                        </div>
+                        <div id="layout_div" class="layout_div"
+                            style="margin-left:300px;margin-top:13px;width:258px;height:455px;">
+                            <canvas id="layout_canvas" class="layout_canvas" style="width: 256px; height: 453px;"
+                                onmousedown="startDrawing(event)" onmousemove="drawCrosshair(event)"
+                                onmouseup="endDrawing(event)" onclick="selectRectangle(event)"></canvas>
+                        </div>
+                        <div id="button_menu_bar" class="right_rect_bar" style="left: 577px;top:13px;">
+                            <button id="btn_video" class="rect_btn"><span ipubLang="video">影片</span></button>
+                            <button id="btn_image" class="rect_btn"><span ipubLang="image">圖片</span></button>
+                            <button id="btn_text" class="rect_btn"><span ipubLang="text">跑馬燈</span></button>
+                            <button id="btn_time" class="rect_btn"><span ipubLang="time">時間</span></button>
+                            <!-- <button id="btn_weather" class="rect_btn"><span pubLang="weather">天氣</span></button> -->
+                            <button id="btn_logo" class="rect_btn"><span ipubLang="logo">Logo</span></button>
+                            <button id="btn_cast" class="rect_btn"><span ipubLang="broadcast">廣播</span></button>
+                            <button id="btn_web" class="rect_btn"><span ipubLang="web">網頁</span></button>
+                           <!-- <div id="weather_menu" class="btn_menu" style="left: -9999px; top: -9999px;">
+                                <ul>
+                                    <li id="btn_weather_text">
+                                        <a href="javascript:void(0);"><span ipublang="weatherText">天氣內容</span></a>
+                                    </li>
+                                    <li id="btn_weather_temperature">
+                                        <a href="javascript:void(0);"><span ipublang="temperature">天氣溫度</span></a>
+                                    </li>
+                                    <li id="btn_weather_logo">
+                                        <a href="javascript:void(0);"><span ipublang="weatherLogo">天氣圖標</span></a>
+                                    </li>
+                                    <li id="btn_weather_title">
+                                        <a href="javascript:void(0);"><span ipublang="weatherTitle">天氣標題</span></a>
+                                    </li>
+                                </ul>
+                            </div>-->
+                        </div>
+
+                        <div id="edit_tool_bar" class="edit_tool_bar" style="left: 145px; top: 575px;">
+                            <table>
+                                <tbody>
+                                    <tr style="vertical-align:middle;">
+                                        <td style="width:51px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="name">名称</span>:
+                                        </td>
+                                        <td style="width:94px;"><input id="rectName" type="text"
+                                                style="width:86px;height:18px;" />
+                                        </td>
+                                        <td style="width:39px;text-align:right;vertical-align:middle;">
+                                            X:</td>
+                                        <td style="width:48px;"><input id="nX" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td style="width:54px;text-align:right;vertical-align:middle;">
+                                            Y:</td>
+                                        <td style="width:48px;"><input id="nY" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td></td>
+                                        <td style="vertical-align:middle;"><button id="btn_sure"
+                                                class="edit_bar_btn"><span ipubLang="ok">确定</span></button>
+                                        </td>
+                                    </tr>
+                                    <tr style="vertical-align:middle;">
+                                        <td style="width:51px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="type">类型</span>:
+                                        </td>
+                                        <td id="rectType" style="width:94px;"></td>
+                                        <td style="width:39px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="width">宽度</span>:
+                                        </td>
+                                        <td style="width:48px;"><input id="nW" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td style="width:54px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="height">高度</span>:
+                                        </td>
+                                        <td style="width:48px;"><input id="nH" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td style="width: 150px;"></td>
+                                        <td style="vertical-align:middle;"><button id="remove_vertical"
+                                                class="edit_bar_btn"><span ipubLang="delete">删除</span></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal6" tabindex="-1" role="dialog" aria-labelledby="editModal6Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width: 1000px; height: 800px;">
+            <div class="modal-content" style="width: 1000px; height: 800px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal6Label">插入素材</h5>
+                    <input type="button" id="view" onclick="viewprogram()" value="預覽"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:400px;"
+                        class="NFButton">
+                    <input type="button" id="view" onclick="" value="重新整理"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:450px;"
+                        class="NFButton">
+                    <input type="button" id="view" onclick="musicClick()" value="背景音樂"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:530px;"
+                        class="NFButton">
+                    <input type="button" id="view" onclick="ttsButtonClick()" value="語音文字"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:610px;"
+                        class="NFButton">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span style="color:#333;">當前節目:</span>&nbsp;<span id="program_content" style="color:#333"></span>
+                    <div
+                        style="position:absolute;margin-top:0px;left: 50px;width: 850px;height: 600px;background-color:#ffffff">
+                        <div id="left_scaleplate_div" class="left_scaleplate_div"
+                            style="position:absolute;color:#000000;width: 10px;height: 522px;">
+                            <img src="/static/images/left.png" alt="1920"
+                                style="margin-top:13px;margin-left:290px ;width: 10px;height: 522px;">
+                        </div>
+                        <div id="top_scaleplate_div" class="top_scaleplate_div"
+                            style="position:relative;color:#000000;width: 295px;height: 10px;">
+                            <img src="/static/images/top.png" alt="1080"
+                                style="margin-left:300px ;width: 295px;height: 10px;margin-top:-10px;">
+                        </div>
+                        <div id="layout_div" class="layout_div"
+                            style="position:absolute;left:300px;top:13px;width:295px;height:522px;border:1px solid #d3d3d3;">
+                            <canvas id="element_canvas" class="element_canvas" tabindex="0"
+                                style="width: 293px; height: 520px;">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal7" tabindex="-1" role="dialog" aria-labelledby="editModal7Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width: 1000px; height: 800px;">
+            <div class="modal-content" style="width: 1000px; height: 800px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal7Label">節目佈局</h5>
+                    <span
+                        style="color: #333;position: absolute;margin-top:-35px;margin-left:100px;">請點擊旁邊按鈕，可以編輯節目內容。</span>
+                    <input type="button" id="reset2" value="重設"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:600px;"
+                        class="NFButton">
+                    <input type="button" id="save" onclick="saveToServer2()" value="儲存"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:650px;"
+                        class="NFButton">
+                    <input type="button" id="update_horizontal" value="更新"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:700px;"
+                        class="NFButton">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <span style="color:#333;">當前節目:</span>&nbsp;<span id="horizontal_program_name" style="color:#333"></span>
+                    </div>
+                    <div
+                        style="position:relative;margin-top:10px;margin-left: 0px;width: 806px;height: 455px;background-color:#ffffff">
+                        <div id="left_scaleplate_div" class="left_scaleplate_div" style="position:absolute;">
+                            <img src="/static/images/1920.png" alt="1920"
+                                style="margin-top:10px;margin-left:50px;">
+                        </div>
+                        <div id="top_scaleplate_div" class="top_scaleplate_div"
+                            style="position:relative;color:#000000;">
+                            <img src="/static/images/1080.png" alt="1080" style="margin-left:35px;margin-top: 23px;">
+                        </div>
+                        <div id="horizontal_div" class="horizontal_div"
+                            style="margin-left:50px;margin-top:13px;width:806px;height:455px;">
+                            <canvas id="horizontal_canvas" class="horizontal_canvas" style="width: 804px; height: 453px;border:1px solid black"
+                                onmousedown="startDrawing2(event)" onmousemove="drawCrosshair2(event)"
+                                onmouseup="endDrawing2(event)" onclick="selectRectangle2(event)"></canvas>
+                        </div>
+                        <div id="button_menu_bar" class="right_rect_bar" style="left: 860px;top:22px;">
+                            <button id="btn_video" class="rect_btn"><span ipubLang="video">影片</span></button>
+                            <button id="btn_image" class="rect_btn"><span ipubLang="image">圖片</span></button>
+                            <button id="btn_text" class="rect_btn"><span ipubLang="text">跑馬燈</span></button>
+                            <button id="btn_time" class="rect_btn"><span ipubLang="time">時間</span></button>
+                            <!-- <button id="btn_weather2" class="rect_btn"><span pubLang="weather">天氣</span></button> -->
+                            <button id="btn_logo" class="rect_btn"><span ipubLang="logo">Logo</span></button>
+                            <button id="btn_cast" class="rect_btn"><span ipubLang="broadcast">廣播</span></button>
+                            <button id="btn_web" class="rect_btn"><span ipubLang="web">網頁</span></button>
+                           <!-- <div id="weather_menu2" class="btn_menu" style="left: -9999px; top: -9999px;">
+                                <ul>
+                                    <li id="btn_weather2_text">
+                                        <a href="javascript:void(0);"><span ipublang="weatherText">天氣內容</span></a>
+                                    </li>
+                                    <li id="btn_weather2_temperature">
+                                        <a href="javascript:void(0);"><span ipublang="temperature">天氣溫度</span></a>
+                                    </li>
+                                    <li id="btn_weather2_logo">
+                                        <a href="javascript:void(0);"><span ipublang="weatherLogo">天氣圖標</span></a>
+                                    </li>
+                                    <li id="btn_weather2_title">
+                                        <a href="javascript:void(0);"><span ipublang="weatherTitle">天氣標題</span></a>
+                                    </li>
+                                </ul>
+                            </div>-->
+                        </div>
+
+                        <div id="edit_tool_bar2" class="edit_tool_bar2" style="left: 145px; top: 575px;">
+                            <table>
+                                <tbody>
+                                    <tr style="vertical-align:middle;">
+                                        <td style="width:51px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="name">名称</span>:
+                                        </td>
+                                        <td style="width:94px;"><input id="rectName2" type="text"
+                                                style="width:86px;height:18px;" />
+                                        </td>
+                                        <td style="width:39px;text-align:right;vertical-align:middle;">
+                                            X:</td>
+                                        <td style="width:48px;"><input id="nX2" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td style="width:54px;text-align:right;vertical-align:middle;">
+                                            Y:</td>
+                                        <td style="width:48px;"><input id="nY2" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td></td>
+                                        <td style="vertical-align:middle;"><button id="btn_sure"
+                                                class="edit_bar_btn"><span ipubLang="ok">确定</span></button>
+                                        </td>
+                                    </tr>
+                                    <tr style="vertical-align:middle;">
+                                        <td style="width:51px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="type">类型</span>:
+                                        </td>
+                                        <td id="rectType2" style="width:94px;"></td>
+                                        <td style="width:39px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="width">宽度</span>:
+                                        </td>
+                                        <td style="width:48px;"><input id="nW2" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td style="width:54px;text-align:right;vertical-align:middle;">
+                                            <span ipubLang="height">高度</span>:
+                                        </td>
+                                        <td style="width:48px;"><input id="nH2" type="text"
+                                                style="width:60px;height:18px;"
+                                                onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                        </td>
+                                        <td style="width: 150px;"></td>
+                                        <td style="vertical-align:middle;"><button id="remove_horizontal"
+                                                class="edit_bar_btn"><span ipubLang="delete">删除</span></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal8" tabindex="-1" role="dialog" aria-labelledby="editModal8Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width: 1000px; height: 800px;">
+            <div class="modal-content" style="width: 1000px; height: 800px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModal8Label">插入素材</h5>
+                    <input type="button" id="view" onclick="" value="重新整理"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:450px;"
+                        class="NFButton">
+                    <input type="button" id="view" onclick="musicClick()" value="背景音樂"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:530px;"
+                        class="NFButton">
+                    <input type="button" id="view" onclick="ttsButtonClick()" value="語音文字"
+                        style="font-family:'微軟雅黑','微軟雅黑','Calibri','Arial', 'sans-serif';position: absolute;margin-top:-35px;margin-left:610px;"
+                        class="NFButton">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span style="color:#333;">當前節目:</span>&nbsp;<span id="horizontal_content" style="color:#333"></span>
+                    <div
+                        style="position:absolute;margin-top:0px;left: 30px;width: 850px;height: 600px;background-color:#ffffff">
+                        <div id="left_scaleplate_div" class="left_scaleplate_div"
+                            style="position:absolute;color:#000000;width: 10px;height: 522px;">
+                            <img src="/static/images/1080.png" alt="1080"
+                                style="margin-top:23px;margin-left:18px ;width: 10px;height: 522px;">
+                        </div>
+                        <div id="top_scaleplate_div" class="top_scaleplate_div"
+                            style="position:relative;color:#000000;width: 295px;height: 10px;">
+                            <img src="/static/images/1920.png" alt="1920"
+                                style="margin-left:27px ;width: 926px;height: 10px;margin-top:10px;">
+                        </div>
+                        <div id="layout_div" class="layout_div"
+                            style="position:absolute;margin-left:28px;margin-top:15px;width:924px;height:522px;border:1px solid black;">
+                            <canvas id="element_horizontal" class="element_horizontal" tabindex="0"
+                                style="width: 924px; height: 520px;">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#deleteBtn').click(function () {
+                var selectedTasks = [];
+                $('input[name="task-checkbox"]:checked').each(function () {
+                    selectedTasks.push($(this).val());
+                });
+
+                if (selectedTasks.length > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/delete_interactTask',
+                        data: JSON.stringify(selectedTasks),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            // 处理成功响应
+                            location.reload(); // 刷新页面
+                        },
+                        error: function (xhr, status, error) {
+                            // 处理错误
+                            console.error(error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        // 获取时间和天气按钮
+        var weatherButton = document.getElementById('btn_weather');
+        var weatherButton2 = document.getElementById('btn_weather2');
+        // 记录当前菜单的显示状态
+        var menuVisible = {
+            'weather': false
+        };
+        // 天气按钮点击事件监听器
+        weatherButton.addEventListener('click', function () {
+            toggleMenu('weather_menu');
+        });
+        weatherButton2.addEventListener('click', function () {
+            toggleMenu('weather_menu2');
+        });
+        // 切换菜单显示状态
+        function toggleMenu(menuId) {
+            // 如果当前菜单已经显示，则隐藏它
+            if (menuVisible[menuId]) {
+                hideMenu(menuId);
+            } else {
+                // 否则显示菜单，并标记为已显示
+                showMenu(menuId);
+                menuVisible[menuId] = true;
+                // 设置一个延时，用于检测第二次点击
+            }
+        }
+        // 显示菜单函数
+        function showMenu(menuId) {
+            // 隐藏其他菜单
+            var menus = document.querySelectorAll('.btn_menu');
+            menus.forEach(function (menu) {
+                if (menu.id !== menuId) {
+                    hideMenu(menu.id);
+                }
+            });
+            // 显示指定菜单
+            var menu = document.getElementById(menuId);
+            menu.style.left = '10px'; // 适当的左偏移量，您可以根据需要调整
+            menu.style.top = '20px'; // 适当的上偏移量，您可以根据需要调整
+        }
+        // 隐藏菜单函数
+        function hideMenu(menuId) {
+            var menu = document.getElementById(menuId);
+            menu.style.left = '-9999px';
+            menu.style.top = '-9999px';
+            menuVisible[menuId] = false;
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#audit').click(function () {
+                changeColorToWhite();
+            });
+            $('.task-checkbox').each(function () {
+                var itemId = $(this).val();
+                var savedColor = localStorage.getItem('labelColor-' + itemId);
+                if (savedColor) {
+                    $('label[data-id="' + itemId + '"]').css('color', savedColor);
+                }
+            });
+            $('.task-name').click(function () {
+                var taskId = $(this).data('id');
+                // 向伺服器發送請求，獲取對應任務的節目資料
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_interacts',
+                    data: { task_id: taskId },
+                    success: function (response) {
+                        // 将获取的节目数据显示在右侧框架中，以表格形式呈现
+                        $('#right_view').html(response);
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Request failed:', status, error);
+                    }
+                });
+            });
+
+            $("#addProgramForm").submit(function (event) {
+                event.preventDefault();
+                var formData = {
+                    interact_name: $("#interact_name").val(),
+                    resolution: $("#resolution").val(),
+                    task_id: $("#task_id").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/add_interacts",
+                    contentType: "application/json",
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        //$("#addProgramForm")[0].reset(); // 清除表單
+
+                        console.log("節目已成功新增到指定任務中");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('新增節目時出現錯誤:', error);
+                    }
+                });
+
+            });
+        });
+        function changeColorToWhite() {
+            $('.task-checkbox:checked').each(function () {
+                var itemId = $(this).val();
+                var label = $('label[data-id="' + itemId + '"]');
+                label.css('color', 'white'); // 將顏色設為白色
+                localStorage.setItem('labelColor-' + itemId, 'white'); // 儲存顏色到 localStorage
+            });
+        }
+        $(document).on('change', 'input[name="interact-checkbox"]', function () {
+            if ($(this).is(':checked')) {
+                var interactId = $(this).val();
+                // 发送 AJAX 请求获取节目信息
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_interact_info',
+                    data: JSON.stringify({ 'interact_id': interactId }),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        // 更新文字框中的内容
+                        $('#selected_name').val(response.interact_name);
+                        $('#selected_resolution').val(response.resolution);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Request failed:', status, error);
+                    }
+                });
+            } else {
+                // 如果复选框被取消选中，清空文字框中的内容
+                $('#selected_name').val('');
+                $('#selected_resolution').val('');
+            }
+        });
+    </script>
+    <script>
+        var interactIds = [];
+        $(document).ready(function () {
+            $('#moveUp').click(function () {
+                moveSelectedRowsUp();
+            });
+            $('#moveDown').click(function () {
+                moveSelectedRowsDown();
+            });
+            $('#remove_right').click(function () {
+                var selectedCheckboxes = $('.interact-checkbox:checked');
+                selectedCheckboxes.each(function () {
+                    var interactId = $(this).val();
+                    interactIds.push(interactId);
+                });
+                deleteInteracts(interactIds);
+            });
+        });
+        function deleteInteracts() {
+            $.ajax({
+                url: '/delete_interacts', // Flask 路由，用于删除视图
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ interact_ids: interactIds }),
+                success: function (response) {
+                    alert("節目删除成功");
+                    location.reload();
+                },
+                error: function () {
+                    alert('删除節目时出错');
+                }
+            });
+        }
+        $('input[name="task-checkbox"]').change(function () {
+            var selectedTaskId = $(this).val();
+            // 发送 AJAX 请求获取任务信息
+            $.ajax({
+                type: 'POST',
+                url: '/get_interactTask_info',
+                data: JSON.stringify({ 'task_id': selectedTaskId }),
+                contentType: 'application/json',
+                success: function (response) {
+                    // 更新文本框中的内容
+                    $('#name').val(response.task_name);
+                    $('#task_time').val(response.time);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+                // 當 checkbox 狀態改變時
+        $('.task-checkbox').change(function () {
+            var itemId = $(this).val();
+            var label = $('label[data-id="' + itemId + '"]');
+            
+            // 取得 label 的顏色
+            var color = label.css('color');
+            
+            // 根據顏色來判斷是否顯示 "審核成功" 或 "未審核"
+            if (color === 'rgb(255, 255, 255)') { // 判斷顏色是否為白色 (審核成功)
+                $('#task_con').val('審核成功');
+            } else if (color === 'rgb(255, 0, 0)') { // 判斷顏色是否為紅色 (未審核)
+                $('#task_con').val('未審核');
+            }
+        });
+        function moveSelectedRowsUp() {
+            // 實現上移的邏輯
+            var checkboxes = $('.interact-checkbox:checked');
+            checkboxes.each(function () {
+                var row = $(this).closest('tr');
+                var prevRow = row.prev();
+                if (prevRow.length > 0) {
+                    row.insertBefore(prevRow);
+                }
+            });
+            //updateSelectedTable();
+        }
+        function moveSelectedRowsDown() {
+            var checkboxes = $('.interact-checkbox:checked');
+            checkboxes.each(function () {
+                var row = $(this).closest('tr');
+                var nextRow = row.next();
+                if (nextRow.length > 0) {
+                    row.insertAfter(nextRow);
+                }
+            });
+            //updateSelectedTable(); // Update selection after moving
+        }
+    </script>
+    <script>
+        var canvas = document.getElementById("horizontal_canvas");
+        var ctx2 = canvas.getContext("2d");
+        canvas.width = 804;
+        canvas.height = 453;
+        var rectangles2 = []; // 存储绘制的矩形
+        var isDrawing2 = false;
+        var isResizing = false; // 是否正在绘制
+        var isDragging2 = false;
+        var startX2, startY2; // 绘制矩形的起始点
+        var selectedRect2 = null; // 记录当前选中的矩形
+        var offsetX2, offsetY2; // 记录鼠标点击位置与矩形左上角的偏移量
+        var activeButton2 = ""; // 记录当前选中的按钮
+        var resizeHandleSize2 = 6;
+        var buttonColors2 = { // 每个按钮对应的颜色
+            'btn_video': '#7F7FFF',
+            'btn_image': '#C78F7F',
+            'btn_text': '#C70000',
+            'btn_time': 'red',
+            'btn_weather2_text': 'red',
+            'btn_weather2_temperature': 'red',
+            'btn_weather2_logo': 'red',
+            'btn_weather2_title': 'red',
+            'btn_logo': '#C74040',
+            'btn_cast': '#C74020',
+            'btn_web': '#C76250'
+        };
+
+        var drawButtons = document.querySelectorAll('.rect_btn');
+
+        drawButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                toggleDrawing2(button.id);
+            });
+        });
+
+        document.querySelectorAll('#weather_menu2 ul li').forEach(function (item) {
+            item.addEventListener('click', function () {
+                toggleDrawing2(item.id);
+                hideMenu(item.closest('.btn_menu').id);
+            });
+        });
+        document.getElementById('reset2').addEventListener('click', function () {
+            clearRectangles2();
+        });
+
+        // 清除所有矩形
+        function clearRectangles2() {
+            rectangles2 = [];
+            redrawCanvas2();
+        }
+        // 切换绘制状态
+        function toggleDrawing2(buttonId) {
+            isDrawing2 = !isDrawing2;
+            if (isDrawing2) {
+                canvas.style.cursor = "crosshair";
+                activeButton2 = buttonId; // 设置当前选中的按钮
+            } else {
+                canvas.style.cursor = "auto";
+                activeButton2 = "";
+            }
+        }
+        // 绘制十字标记
+        function drawCrosshair2(event) {
+            if (isDrawing2) {
+                var mouseX = event.clientX - canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+                ctx2.clearRect(0, 0, canvas.width, canvas.height);
+                drawAllRectangles2();
+
+                if (startX2 !== null && startY2 !== null) {
+                    ctx2.beginPath();
+                    ctx2.setLineDash([5, 5]); // 设置虚线样式
+                    ctx2.strokeStyle = 'black';
+                    ctx2.strokeRect(startX2, startY2, mouseX - startX2, mouseY - startY2);
+                }
+
+                ctx2.beginPath();
+                ctx2.moveTo(mouseX, 0);
+                ctx2.lineTo(mouseX, canvas.height);
+                ctx2.moveTo(0, mouseY);
+                ctx2.lineTo(canvas.width, mouseY);
+                //ctx2.stroke();
+            } else if (selectedRect2 !== null) {
+                // 获取鼠标相对于画布的坐标
+                var mouseX = event.clientX - canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+                // 检查鼠标位置是否在选中的矩形边界附近
+                var resizeHandle = getResizeHandleType2(mouseX, mouseY, selectedRect2);
+                if (resizeHandle !== null) {
+                    // 设置对应的鼠标样式
+                    canvas.style.cursor = getCursorStyle2(resizeHandle);
+                } else {
+                    // 恢复默认鼠标样式
+                    canvas.style.cursor = "auto";
+                }
+            }
+        }
+
+        // 开始绘制矩形
+        function startDrawing2(event) {
+            if (isDrawing2) {
+                startX2 = event.clientX - canvas.getBoundingClientRect().left;
+                startY2 = event.clientY - canvas.getBoundingClientRect().top;
+            } else if (selectedRect2 !== null) {
+                offsetX2 = event.clientX - canvas.getBoundingClientRect().left - selectedRect2.x;
+                offsetY2 = event.clientY - canvas.getBoundingClientRect().top - selectedRect2.y;
+                isDragging2 = true;
+            }
+        }
+        // 结束绘制矩形
+        function endDrawing2(event) {
+            if (isDrawing2) {
+                var mouseX = event.clientX - canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+                // 保存当前矩形到数组
+                var width = mouseX - startX2;
+                var height = mouseY - startY2;
+                rectangles2.push({
+                    id: activeButton2,
+                    name: document.getElementById(activeButton2).innerText,
+                    x: startX2,
+                    y: startY2,
+                    width: width,
+                    height: height,
+                    color: buttonColors2[activeButton2],
+                    buttonText: document.getElementById(activeButton2).innerText
+                });
+                // 重置绘制状态
+                startX2 = null;
+                startY2 = null;
+                canvas.style.cursor = "auto"; // 将鼠标样式恢复为默认
+                activeButton2 = ""; // 清空当前选中的按钮*/
+                redrawCanvas2();
+            }
+        }
+        // 绘制所有矩形
+        function drawAllRectangles2() {
+            ctx2.clearRect(0, 0, canvas.width, canvas.height);
+            rectangles2.forEach(function (rect) {
+                ctx2.fillStyle = rect.color; // 设置填充颜色
+                var scaleX = canvas.width / 800; // 寬度的比例因子
+                var scaleY = canvas.height / 450; // 高度的比例因子
+                ctx2.fillRect(rect.x * scaleX, rect.y * scaleY, rect.width * scaleX, rect.height * scaleY); // 绘制实心矩形
+                ctx2.font = "bold 14px Arial";
+                ctx2.fillStyle = "yellow";
+                ctx2.textAlign = "center"; // 文本水平居中
+                ctx2.textBaseline = "middle"; // 文本垂直居中
+                // 计算文本的位置
+                var textX = rect.x + rect.width / 2;
+                var textY = rect.y + rect.height / 2;
+                if (typeof rect.id === 'string') {
+                    if (rect.id.startsWith("btn_weather2")) {
+                        ctx2.font = "bold 28px Arial"; // 设置大一点的字体
+                        ctx2.fillStyle = "white"; // 设置白色字体
+                    } else if (rect.id.startsWith("btn_date")) {
+                        ctx2.font = "bold 28px Arial"; // 设置日期的正常大小字体
+                        ctx2.fillStyle = "white"; // 设置黄色字体
+                    } else {
+                        ctx2.font = "bold 14px Arial"; // 其他按钮保持正常大小
+                        ctx2.fillStyle = "yellow"; // 其他按钮使用黄色字体
+                    }
+                }
+                ctx2.fillText(rect.name, textX, textY); // 绘制按钮文本
+            });
+        }
+        // 选中矩形事件处理程序
+        function selectRectangle2(event) {
+            var scaleX = canvas.width / 800; // 寬度的比例因子
+            var scaleY = canvas.height / 450; // 高度的比例因子
+            var mouseX = event.clientX - canvas.getBoundingClientRect().left;
+            var mouseY = event.clientY - canvas.getBoundingClientRect().top;
+            for (var i = rectangles2.length - 1; i >= 0; i--) {
+                var rect = rectangles2[i];
+                var rectX = rect.x * scaleX;
+                var rectY = rect.y * scaleY;
+                var rectWidth = rect.width * scaleX;
+                var rectHeight = rect.height * scaleY;
+                // 判断鼠标点击位置是否在矩形内
+                if (mouseX >= rectX && mouseX <= rectX + rectWidth && mouseY >= rectY && mouseY <= rectY + rectHeight) {
+                    selectedRect2 = rect;
+                    offsetX2 = mouseX - rectX;
+                    offsetY2 = mouseY - rectY;
+                    // 显示矩形信息
+                    document.getElementById('rectName2').value = rect.name;
+                    document.getElementById('rectType2').innerText = rect.name;
+                    document.getElementById('nX2').value = Math.round(rect.x * (1920 / 804));
+                    document.getElementById('nY2').value = Math.round(rect.y * (1080 / 453));
+                    document.getElementById('nW2').value = Math.round(rect.width * (1920 / 804));
+                    document.getElementById('nH2').value = Math.round(rect.height * (1080 / 453));
+                    document.getElementById('edit_tool_bar2').style.display = 'block';
+                    canvas.style.cursor = "move"; // 设置鼠标样式为移动
+
+                    document.getElementById('remove_horizontal').onclick = function() {
+                        delete_horizontal(rect);
+                    };
+                    return;
+                }
+            }
+            selectedRect2 = null;
+        }
+        function delete_horizontal(rect) {
+            console.log("Program Name:", document.getElementById('horizontal_program_name').innerText);
+            console.log("Rectangle Name:", rect.name);
+
+            // 從前端陣列中刪除矩形
+            rectangles = rectangles.filter(function(r) {
+                return r !== rect;
+            });
+
+            // 清除畫布上的矩形並重新繪製
+            redrawCanvas();
+
+            // 向伺服器發送刪除請求
+            fetch('/delete_rectangle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    program_name: document.getElementById('horizontal_program_name').innerText,
+                    rectangle_name: rect.name
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Rectangle deleted successfully');
+                } else {
+                    console.error('Failed to delete rectangle:', data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        // 鼠标释放事件处理程序
+        function endDrag2(event) {
+            isDragging2 = false;
+            canvas.removeEventListener('mousemove', handleDrag2);
+            canvas.removeEventListener('mouseup', endDrag2);
+
+        }
+        // 拖拽矩形
+        function handleDrag2(event) {
+            if (isDragging2 && selectedRect2 !== null) {
+                var mouseX = event.clientX - canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+                if (isResizing) {
+                    // Calculate new size
+                    var newWidth = mouseX - selectedRect2.x;
+                    var newHeight = mouseY - selectedRect2.y;
+                    // Ensure the rectangle stays within canvas boundaries
+                    newWidth = Math.max(resizeHandleSize2, Math.min(newWidth, canvas.width - selectedRect2.x));
+                    newHeight = Math.max(resizeHandleSize2, Math.min(newHeight, canvas.height - selectedRect2.y));
+                    selectedRect2.width = newWidth;
+                    selectedRect2.height = newHeight;
+
+                    // Update the HTML elements with new dimensions
+                    document.getElementById('nX2').value = (selectedRect2.width * (1920 / 804)).toFixed(0);
+                    document.getElementById('nY2').value = (selectedRect2.height * (1080 / 453)).toFixed(0);
+                    document.getElementById('nW2').value = (selectedRect2.width * (1920 / 804)).toFixed(0);
+                    document.getElementById('nH2').value = (selectedRect2.height * (1080 / 453)).toFixed(0);
+                    redrawCanvas2();
+                    
+                    document.getElementById('update_horizontal').onclick = function() {
+                        update_horizontal(); // 調用更新所有矩形的函數
+                    };
+                } else if (selectedRect2) {
+                    var newX = mouseX - offsetX2;
+                    var newY = mouseY - offsetY2;
+                    newX = Math.max(0, Math.min(newX, canvas.width - selectedRect2.width));
+                    newY = Math.max(0, Math.min(newY, canvas.height - selectedRect2.height));
+                    selectedRect2.x = newX;
+                    selectedRect2.y = newY;
+
+                    redrawCanvas2();
+                }
+            }
+        }
+        function update_horizontal(){
+            console.log("Program Name:", document.getElementById('horizontal_program_name').innerText);
+
+            // 遍歷所有矩形並發送更新請求
+            rectangles2.forEach(rect => {
+                console.log("Updating Rectangle Name:", rect.name);
+
+                fetch('/update_rectangle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        program_name: document.getElementById('horizontal_program_name').innerText, // 節目名稱
+                        rectangle_name: rect.name, // 矩形名稱
+                        width: rect.width, // 矩形的寬度
+                        height: rect.height, // 矩形的高度
+                        x: rect.x, // 矩形的 X 坐標
+                        y: rect.y  // 矩形的 Y 坐標
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Rectangle updated successfully:', rect.name);
+                    } else {
+                        console.error('Failed to update rectangle:', rect.name, data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error updating rectangle:', rect.name, error);
+                });
+            });
+
+            // 更新後可考慮重新繪製畫布
+            redrawCanvas(); // 重新繪製畫布以反映更新
+        }
+        // 重新绘制Canvas
+        function redrawCanvas2() {
+            ctx2.clearRect(0, 0, canvas.width, canvas.height);
+            drawAllRectangles2();
+        }
+        function getResizeHandleType2(mouseX, mouseY, rect) {
+            var resizeThreshold = 10; // 调整大小的边缘阈值
+            var scaleX = canvas.width / 800; // 寬度的比例因子
+            var scaleY = canvas.height / 450; // 高度的比例因子
+            // Check for the resize handle at each corner
+            if (mouseX >= (rect.x * scaleX + rect.width * scaleX - resizeThreshold) &&
+                mouseX <= (rect.x * scaleX + rect.width * scaleX) &&
+                mouseY >= (rect.y * scaleY + rect.height * scaleY - resizeThreshold) &&
+                mouseY <= (rect.y * scaleY + rect.height * scaleY)) {
+                return "se-resize"; // 右下角
+            } else if (mouseX >= (rect.x * scaleX) &&
+                mouseX <= (rect.x * scaleX + resizeThreshold) &&
+                mouseY >= (rect.y * scaleY + rect.height * scaleY - resizeThreshold) &&
+                mouseY <= (rect.y * scaleY + rect.height * scaleY)) {
+                return "sw-resize"; // 左下角
+            } else if (mouseX >= (rect.x * scaleX + rect.width * scaleX - resizeThreshold) &&
+                mouseX <= (rect.x * scaleX + rect.width * scaleX) &&
+                mouseY >= (rect.y * scaleY) &&
+                mouseY <= (rect.y * scaleY + resizeThreshold)) {
+                return "ne-resize"; // 右上角
+            } else if (mouseX >= (rect.x * scaleX) &&
+                mouseX <= (rect.x * scaleX + resizeThreshold) &&
+                mouseY >= (rect.y * scaleY) &&
+                mouseY <= (rect.y * scaleY + resizeThreshold)) {
+                return "nw-resize"; // 左上角
+            }
+            return null;
+        }
+        // Get cursor style based on resize handle type
+        function getCursorStyle2(handleType) {
+            switch (handleType) {
+                case 'top-left':
+                case 'bottom-right':
+                    return 'nwse-resize';
+                case 'top-right':
+                case 'bottom-left':
+                    return 'nesw-resize';
+                case 'left':
+                case 'right':
+                    return 'ew-resize';
+                case 'top':
+                case 'bottom':
+                    return 'ns-resize';
+                default:
+                    return 'auto';
+            }
+        }
+        function saveToServer2(buttonId) {
+            var view_name = document.getElementById('horizontal_program_name').innerText;
+            var rectangles2ToSave = rectangles2.map(function (rect) {
+                return {
+                    name: rect.name,
+                    x: rect.x,
+                    y: rect.y,
+                    width: rect.width,
+                    height: rect.height,
+                    color: rect.color,
+                    id: rect.id,
+                    program_name: view_name,
+                    src: rect.src
+                };
+            });
+            fetch('/save_and_generate_xml2', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ program_name: view_name, rectangles2: rectangles2ToSave }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function drawRectangles2(rectangles2) {
+            ctx2.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+            rectangles2.forEach(function (rect) {
+                ctx2.fillStyle = rect.color;
+                ctx2.fillRect(rect.x, rect.y, rect.width, rect.height);
+                ctx2.font = "bold 14px Arial";
+                ctx2.fillStyle = "yellow";
+                ctx2.textAlign = "center"; // 文本水平居中
+                ctx2.textBaseline = "middle"; // 文本垂直居中
+                // 计算文本的位置
+                var textX = rect.x + rect.width / 2;
+                var textY = rect.y + rect.height / 2;
+
+                ctx2.fillText(rect.name, textX, textY); // 绘制按钮文本
+                ctx2.fillStyle = "black";
+                ctx2.fillRect(rect.x + rect.width - resizeHandleSize2, rect.y + rect.height - resizeHandleSize2, resizeHandleSize2, resizeHandleSize2);
+            });
+            canvas.rectangles2 = rectangles2;
+        }
+
+        // Function to fetch rectangles2 from server
+        function fetchRectangles2(programName) {
+            fetch(`/rectangles/${programName}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Retrieved rectangles2:', data);
+                    if (data.length > 0) {
+                        rectangles2 = data; // 用獲取的矩形資料替換現有的矩形
+                        drawRectangles2(rectangles2);
+                    } else {
+                        // 如果沒有資料，允許繪製新矩形
+                        console.log('No rectangles2 found. You can draw new rectangles2.');
+                        rectangles2 = []; // 初始化為空的矩形數組
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching rectangles2:', error);
+                });
+        }
+        function getMousePos2(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        function isInsideRect2(pos, rect) {
+            return pos.x > rect.x && pos.x < rect.x + rect.width && pos.y > rect.y && pos.y < rect.y + rect.height;
+        }
+        function isInsideResizeHandle2(pos, rect) {
+            return pos.x >= rect.x + rect.width - resizeHandleSize2 &&
+                pos.y >= rect.y + rect.height - resizeHandleSize2 &&
+                pos.x <= rect.x + rect.width &&
+                pos.y <= rect.y + rect.height;
+        }
+
+        canvas.addEventListener('mousedown', function (evt) {
+            var mousePos = getMousePos2(canvas, evt);
+            //var rectangles2 = canvas.rectangles2 || [];
+            rectangles2.forEach(function (rect) {
+                if (isInsideResizeHandle2(mousePos, rect)) {
+                    selectedRect2 = rect;
+                    isResizing = true;
+                    offsetX2 = mousePos.x - (rect.x + rect.width);
+                    offsetY2 = mousePos.y - (rect.y + rect.height);
+                } else if (isInsideRect2(mousePos, rect)) {
+                    selectedRect2 = rect;
+                    isResizing = false;
+                    offsetX2 = mousePos.x - rect.x;
+                    offsetY2 = mousePos.y - rect.y;
+                    selectRectangle2(evt);
+                }
+            });
+            if (selectedRect2) {
+                canvas.addEventListener('mousemove', handleDrag2);
+                canvas.addEventListener('mouseup', endDrag2);
+            }
+        });
+        canvas.addEventListener('mousemove', function (evt) {
+            if (selectedRect2) {
+                var mousePos = getMousePos2(canvas, evt);
+
+                if (isResizing) {
+                    // Calculate new size
+                    var newWidth = mousePos.x - selectedRect2.x;
+                    var newHeight = mousePos.y - selectedRect2.y;
+                    // Ensure the rectangle stays within canvas boundaries
+                    newWidth = Math.max(resizeHandleSize2, Math.min(newWidth, canvas.width - selectedRect2.x));
+                    newHeight = Math.max(resizeHandleSize2, Math.min(newHeight, canvas.height - selectedRect2.y));
+                    selectedRect2.width = newWidth;
+                    selectedRect2.height = newHeight;
+                    // Update the HTML elements with new dimensions
+                    document.getElementById('nW2').value = (selectedRect2.width * (1920 / 804)).toFixed(0);
+                    document.getElementById('nH2').value = (selectedRect2.height * (1080 / 453)).toFixed(0);
+                    redrawCanvas2();
+                } else if (selectedRect2) {
+                    handleDrag2(evt);
+                }
+            }
+        });
+        canvas.addEventListener('mouseup', function () {
+            selectedRect2 = null;
+            isResizing = false;
+        });
+        var rectsArray = [];
+        var rect = {};
+        const modal2 = document.getElementById('modal2');
+        const fileInput2 = document.getElementById('fileInput2');
+        let video2 = null;
+        let animationId2 = null;
+        function drawFileRect2(xmlDoc) {
+            var canvas = document.getElementById("element_horizontal");
+            var ctx1 = canvas.getContext("2d");
+            canvas.width = 804;  // 设置画布大小
+            canvas.height = 453;
+
+            var programs = xmlDoc.getElementsByTagName('program');
+
+            for (var i = 0; i < programs.length; i++) {
+                var program = programs[i];
+                var buttons = program.children;
+
+                for (var j = 0; j < buttons.length; j++) {
+                    var button = buttons[j];
+                    var rect = {
+                        id: button.nodeName,
+                        name: button.getAttribute("name"),
+                        x: parseFloat(button.getAttribute("x")),
+                        y: parseFloat(button.getAttribute("y")),
+                        width: parseFloat(button.getAttribute("width")),
+                        height: parseFloat(button.getAttribute("height")),
+                        src: button.getAttribute("src"),
+                        fileType: determineFileType(button.nodeName)
+                    };
+
+                    // 保存矩形数据
+                    rectsArray.push(rect);
+
+                    // 处理素材
+                    if (rect.src && rect.src.trim() !== "") {
+                        if (rect.fileType === "image") {
+                            drawImage(ctx1, rect);
+                        } else if (rect.fileType === "video") {
+                            drawVideo(ctx1, rect);
+                        }
+                    } else {
+                        switch (rect.id) {
+                            case 'imagerect':
+                                ctx1.fillStyle = "#C78F7F";
+                                break;
+                            case 'videorect':
+                                ctx1.fillStyle = "#7F7FFF";
+                                break;
+                            case 'textrect':
+                                ctx1.fillStyle = "#C70000";
+                                break;
+                            case 'timerect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_text_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_logo_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_title_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_temperature_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'logorect':
+                                ctx1.fillStyle = "#C74040";
+                                break;
+                            case 'broadcastrect':
+                                ctx1.fillStyle = "#C74020";
+                                break;
+                            case 'webrect':
+                                ctx1.fillStyle = "#C76250";
+                                break;
+                            default:
+                                ctx1.fillStyle = "#000000";
+                        }
+
+                        // 绘制矩形
+                        ctx1.fillRect(rect.x, rect.y, rect.width, rect.height);
+
+                        // 绘制文本
+                        ctx1.fillStyle = "yellow";
+                        ctx1.font = "12px Arial";
+                        ctx1.textAlign = "center";
+                        ctx1.textBaseline = "middle";
+                        ctx1.fillText(rect.name, rect.x + rect.width / 2, rect.y + rect.height / 2);
+                    }
+
+                    console.log(rectsArray);  // 调试用
+                }
+            }
+
+            canvas.addEventListener('click', handleCanvasClick2);
+        }
+        function handleCanvasClick2(event) {
+            var canvas = document.getElementById('element_horizontal');
+            var rect = canvas.getBoundingClientRect();
+            var clickX = event.clientX - rect.left;
+            var clickY = event.clientY - rect.top;
+
+            var clickedRect = null;
+            for (var i = 0; i < rectsArray.length; i++) {
+                var rectangle = rectsArray[i];
+                if (clickX >= rectangle.x && clickX <= rectangle.x + rectangle.width &&
+                    clickY >= rectangle.y && clickY <= rectangle.y + rectangle.height) {
+                    clickedRect = rectangle;
+                    break;
+                }
+            }
+
+            if (clickedRect) {
+                //console.log("Rectangle clicked:", clickedRect);
+                showModal2(clickedRect);
+            } else {
+                console.log('Clicked outside of any rectangles.');
+            }
+        }
+        function showModal2(clickedRect) {
+            modal2.style.display = "block"; // Show the modal
+            console.log("Opening modal for:", clickedRect);
+            document.getElementById("selectedRectId2").value = clickedRect.id;
+            // Store the rectangle ID for later use
+            document.getElementById("fileInput2").setAttribute("data-rect-id", clickedRect.id);
+        }
+
+        function closeModal2() {
+            modal2.style.display = 'none';
+        }
+        function saveTohorizontal() {
+            var fileInput2 = document.getElementById('fileInput2');
+            var selectedRectId2 = document.getElementById('selectedRectId2').value; // 获取矩形 ID
+            var programName = document.getElementById('horizontal_content').innerText; // 获取当前节目名称
+            var rectId = fileInput2.getAttribute("data-rect-id");
+
+            if (fileInput2.files.length === 0) {
+                alert("请选择一个文件！");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('file', fileInput2.files[0]);
+            formData.append('rectId2', rectId);
+            formData.append('programName', programName);
+
+            fetch("/upload_horizontal", {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('File uploaded successfully.');
+                    } else {
+                        console.error('Upload failed:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('上传错误:', error);
+                });
+        }
+        function loadXMLfile2() {
+            clearPreviousContent2();
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Parse and process XML content
+                    console.log("XML Loaded Successfully:");
+                    console.log(this.responseXML);
+                    drawFileRect2(this.responseXML); // Pass responseXML to drawRectangles function
+                } else if (this.readyState == 4 && this.status != 200) {
+                    console.error("Failed to load XML. Status:", this.status);
+                }
+            };
+            var checkbox = document.querySelector('input[name="interact-checkbox"]:checked');
+            if (checkbox) {
+                var program_name = checkbox.dataset.interactName;
+                var url = '/load-xml/' + program_name; // Construct the correct URL
+
+                console.log("Loading XML from:", url);
+                xhr.open('GET', url, true);
+                xhr.send();
+            } else {
+                alert("Please select a program.");
+            }
+        }
+        function clearPreviousContent2() {
+            var canvas = document.getElementById("element_horizontal");
+            var ctx1 = canvas.getContext("2d");
+            // 清空画布
+            ctx1.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 清除所有视频元素
+            var existingVideos = document.querySelectorAll('video');
+            existingVideos.forEach(function (video) {
+                // 停止播放视频
+                video.pause();
+                video.src = ""; // 清空视频源
+                video.load();  // 重新加载视频
+                // 从 DOM 中移除视频元素
+                if (video.parentNode) {
+                    video.parentNode.removeChild(video);
+                }
+            });
+
+            // 清空矩形数据
+            rectsArray = [];
+        }
+    </script>
+    <script>
+        var layout_canvas = document.getElementById("layout_canvas");
+        var ctx1 = layout_canvas.getContext("2d");
+        layout_canvas.width = 254;
+        layout_canvas.height = 451;
+        var rectangles = []; // 存储绘制的矩形
+        var isDrawing = false;
+        var isResizing = false; // 是否正在绘制
+        var isDragging = false;
+        var startX, startY; // 绘制矩形的起始点
+        var selectedRect = null; // 记录当前选中的矩形
+        var offsetX, offsetY; // 记录鼠标点击位置与矩形左上角的偏移量
+        let lastX, lastY;
+        var activeButton = ""; // 记录当前选中的按钮
+        var resizeHandleSize = 6;
+        var buttonColors = { // 每个按钮对应的颜色
+            'btn_video': '#7F7FFF',
+            'btn_image': '#C78F7F',
+            'btn_text': '#C70000',
+            'btn_time': 'red',
+            'btn_weather_text': 'red',
+            'btn_weather_temperature': 'red',
+            'btn_weather_logo': 'red',
+            'btn_weather_title': 'red',
+            'btn_logo': '#C74040',
+            'btn_cast': '#C74020',
+            'btn_web': '#C76250'
+        };
+
+        var drawButtons = document.querySelectorAll('.rect_btn');
+
+        drawButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                toggleDrawing(button.id);
+            });
+        });
+
+        document.querySelectorAll('#weather_menu ul li').forEach(function (item) {
+            item.addEventListener('click', function () {
+                toggleDrawing(item.id);
+                hideMenu(item.closest('.btn_menu').id);
+            });
+        });
+        document.getElementById('reset').addEventListener('click', function () {
+            clearRectangles();
+        });
+
+        // 清除所有矩形
+        function clearRectangles() {
+            rectangles = [];
+            redrawCanvas();
+        }
+        // 切换绘制状态
+        function toggleDrawing(buttonId) {
+            isDrawing = !isDrawing;
+            if (isDrawing) {
+                layout_canvas.style.cursor = "crosshair";
+                activeButton = buttonId; // 设置当前选中的按钮
+            } else {
+                layout_canvas.style.cursor = "auto";
+                activeButton = "";
+            }
+        }
+        // 绘制十字标记
+        function drawCrosshair(event) {
+            if (isDrawing) {
+                var mouseX = event.clientX - layout_canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - layout_canvas.getBoundingClientRect().top;
+
+                ctx1.clearRect(0, 0, layout_canvas.width, layout_canvas.height);
+                drawAllRectangles();
+
+                if (startX !== null && startY !== null) {
+                    ctx1.beginPath();
+                    ctx1.setLineDash([5, 5]); // 设置虚线样式
+                    ctx1.strokeStyle = 'black';
+                    ctx1.strokeRect(startX, startY, mouseX - startX, mouseY - startY);
+                }
+
+                ctx1.beginPath();
+                ctx1.moveTo(mouseX, 0);
+                ctx1.lineTo(mouseX, layout_canvas.height);
+                ctx1.moveTo(0, mouseY);
+                ctx1.lineTo(layout_canvas.width, mouseY);
+                //ctx1.stroke();
+            } else if (selectedRect !== null) {
+                // 获取鼠标相对于画布的坐标
+                var mouseX = event.clientX - layout_canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - layout_canvas.getBoundingClientRect().top;
+
+                // 检查鼠标位置是否在选中的矩形边界附近
+                var resizeHandle = getResizeHandleType(mouseX, mouseY, selectedRect);
+                if (resizeHandle !== null) {
+                    // 设置对应的鼠标样式
+                    layout_canvas.style.cursor = getCursorStyle(resizeHandle);
+                } else {
+                    // 恢复默认鼠标样式
+                    layout_canvas.style.cursor = "auto";
+                }
+            }
+        }
+
+        // 开始绘制矩形
+        function startDrawing(event) {
+            if (isDrawing) {
+                startX = event.clientX - layout_canvas.getBoundingClientRect().left;
+                startY = event.clientY - layout_canvas.getBoundingClientRect().top;
+            } else if (selectedRect !== null) {
+                offsetX = event.clientX - layout_canvas.getBoundingClientRect().left - selectedRect.x;
+                offsetY = event.clientY - layout_canvas.getBoundingClientRect().top - selectedRect.y;
+                isDragging = true;
+            }
+        }
+        // 结束绘制矩形
+        function endDrawing(event) {
+            if (isDrawing) {
+                var mouseX = event.clientX - layout_canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - layout_canvas.getBoundingClientRect().top;
+
+                // 保存当前矩形到数组
+                var width = mouseX - startX;
+                var height = mouseY - startY;
+                rectangles.push({
+                    id: activeButton,
+                    name: document.getElementById(activeButton).innerText,
+                    x: startX,
+                    y: startY,
+                    width: width,
+                    height: height,
+                    color: buttonColors[activeButton],
+                    buttonText: document.getElementById(activeButton).innerText
+                });
+                // 重置绘制状态
+                startX = null;
+                startY = null;
+                layout_canvas.style.cursor = "auto"; // 将鼠标样式恢复为默认
+                activeButton = ""; // 清空当前选中的按钮*/
+                redrawCanvas();
+            }
+        }
+        // 绘制所有矩形
+        function drawAllRectangles() {
+            ctx1.clearRect(0, 0, layout_canvas.width, layout_canvas.height);
+            rectangles.forEach(function (rect) {
+                ctx1.fillStyle = rect.color; // 设置填充颜色
+                var scaleX = layout_canvas.width / 250; // 寬度的比例因子
+                var scaleY = layout_canvas.height / 450; // 高度的比例因子
+                ctx1.fillRect(rect.x * scaleX, rect.y * scaleY, rect.width * scaleX, rect.height * scaleY); // 绘制实心矩形
+                ctx1.font = "bold 14px Arial";
+                ctx1.fillStyle = "yellow";
+                ctx1.textAlign = "center"; // 文本水平居中
+                ctx1.textBaseline = "middle"; // 文本垂直居中
+                // 计算文本的位置
+                var textX = rect.x + rect.width / 2;
+                var textY = rect.y + rect.height / 2;
+                if (typeof rect.id === 'string') {
+                    if (rect.id.startsWith("btn_weather")) {
+                        ctx1.font = "bold 28px Arial"; // 设置大一点的字体
+                        ctx1.fillStyle = "white"; // 设置白色字体
+                    } else if (rect.id.startsWith("btn_date")) {
+                        ctx1.font = "bold 28px Arial"; // 设置日期的正常大小字体
+                        ctx1.fillStyle = "white"; // 设置黄色字体
+                    } else {
+                        ctx1.font = "bold 14px Arial"; // 其他按钮保持正常大小
+                        ctx1.fillStyle = "yellow"; // 其他按钮使用黄色字体
+                    }
+                }
+                ctx1.fillText(rect.name, textX, textY); // 绘制按钮文本
+            });
+        }
+        // 选中矩形事件处理程序
+        function selectRectangle(event) {
+            var scaleX = layout_canvas.width / 250; // 寬度的比例因子
+            var scaleY = layout_canvas.height / 450; // 高度的比例因子
+            var mouseX = event.clientX - layout_canvas.getBoundingClientRect().left;
+            var mouseY = event.clientY - layout_canvas.getBoundingClientRect().top;
+            for (var i = rectangles.length - 1; i >= 0; i--) {
+                var rect = rectangles[i];
+                var rectX = rect.x * scaleX;
+                var rectY = rect.y * scaleY;
+                var rectWidth = rect.width * scaleX;
+                var rectHeight = rect.height * scaleY;
+                // 判断鼠标点击位置是否在矩形内
+                if (mouseX >= rectX && mouseX <= rectX + rectWidth && mouseY >= rectY && mouseY <= rectY + rectHeight) {
+                    selectedRect = rect;
+                    offsetX = mouseX - rectX;
+                    offsetY = mouseY - rectY;
+                    // 显示矩形信息
+                    document.getElementById('rectName').value = rect.name;
+                    document.getElementById('rectType').innerText = rect.name;
+                    document.getElementById('nX').value = Math.round(rect.x * (1080 / 254));
+                    document.getElementById('nY').value = Math.round(rect.y * (1920 / 451));
+                    document.getElementById('nW').value = Math.round(rect.width * (1080 / 254));
+                    document.getElementById('nH').value = Math.round(rect.height * (1920 / 451));
+                    document.getElementById('edit_tool_bar').style.display = 'block';
+                    layout_canvas.style.cursor = "move"; // 设置鼠标样式为移动
+                    document.getElementById('remove_vertical').onclick = function() {
+                        delete_vertical(rect);
+                    };
+                    return;
+                }
+            }
+            selectedRect = null;
+        }
+        function delete_vertical(rect) {
+            console.log("Program Name:", document.getElementById('vertical_program_name').innerText);
+            console.log("Rectangle Name:", rect.name);
+
+            // 從前端陣列中刪除矩形
+            rectangles = rectangles.filter(function(r) {
+                return r !== rect;
+            });
+
+            // 清除畫布上的矩形並重新繪製
+            redrawCanvas();
+
+            // 向伺服器發送刪除請求
+            fetch('/delete_rectangle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    program_name: document.getElementById('vertical_program_name').innerText,
+                    rectangle_name: rect.name
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Rectangle deleted successfully');
+                } else {
+                    console.error('Failed to delete rectangle:', data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        // 鼠标释放事件处理程序
+        function endDrag(event) {
+            isDragging = false;
+            layout_canvas.removeEventListener('mousemove', handleDrag);
+            layout_canvas.removeEventListener('mouseup', endDrag);
+
+        }
+        // 拖拽矩形
+        function handleDrag(event) {
+            if (isDragging && selectedRect !== null) {
+                var mouseX = event.clientX - layout_canvas.getBoundingClientRect().left;
+                var mouseY = event.clientY - layout_canvas.getBoundingClientRect().top;
+
+                if (isResizing) {
+                    // Calculate new size
+                    var newWidth = mouseX - selectedRect.x;
+                    var newHeight = mouseY - selectedRect.y;
+                    // Ensure the rectangle stays within canvas boundaries
+                    newWidth = Math.max(resizeHandleSize, Math.min(newWidth, layout_canvas.width - selectedRect.x));
+                    newHeight = Math.max(resizeHandleSize, Math.min(newHeight, layout_canvas.height - selectedRect.y));
+                    selectedRect.width = newWidth;
+                    selectedRect.height = newHeight;
+
+                    // Update the HTML elements with new dimensions
+                    document.getElementById('nX').value = (selectedRect.width * (1080 / 254)).toFixed(0);
+                    document.getElementById('nY').value = (selectedRect.height * (1920 / 451)).toFixed(0);
+                    document.getElementById('nW').value = (selectedRect.width * (1080 / 254)).toFixed(0);
+                    document.getElementById('nH').value = (selectedRect.height * (1920 / 451)).toFixed(0);
+                    redrawCanvas();
+
+                    document.getElementById('update_vertical').onclick = function() {
+                        update_vertical();
+                    };
+                } else if (selectedRect) {
+                    var newX = mouseX - offsetX;
+                    var newY = mouseY - offsetY;
+                    newX = Math.max(0, Math.min(newX, layout_canvas.width - selectedRect.width));
+                    newY = Math.max(0, Math.min(newY, layout_canvas.height - selectedRect.height));
+                    selectedRect.x = newX;
+                    selectedRect.y = newY;
+
+                    redrawCanvas();
+                }
+            }
+        }
+        function update_vertical(){
+            console.log("Program Name:", document.getElementById('vertical_program_name').innerText);
+
+            // 遍歷所有矩形並發送更新請求
+            rectangles.forEach(rect => {
+                console.log("Updating Rectangle Name:", rect.name);
+
+                fetch('/update_rectangle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        program_name: document.getElementById('vertical_program_name').innerText, // 節目名稱
+                        rectangle_name: rect.name, // 矩形名稱
+                        width: rect.width, // 矩形的寬度
+                        height: rect.height, // 矩形的高度
+                        x: rect.x, // 矩形的 X 坐標
+                        y: rect.y  // 矩形的 Y 坐標
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Rectangle updated successfully:', rect.name);
+                    } else {
+                        console.error('Failed to update rectangle:', rect.name, data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error updating rectangle:', rect.name, error);
+                });
+            });
+
+            // 更新後可考慮重新繪製畫布
+            redrawCanvas(); // 重新繪製畫布以反映更新
+        }
+        // 重新绘制Canvas
+        function redrawCanvas() {
+            ctx1.clearRect(0, 0, layout_canvas.width, layout_canvas.height);
+            drawAllRectangles();
+        }
+        function getResizeHandleType(mouseX, mouseY, rect) {
+            var resizeThreshold = 10; // 调整大小的边缘阈值
+            var scaleX = layout_canvas.width / 250; // 寬度的比例因子
+            var scaleY = layout_canvas.height / 450; // 高度的比例因子
+            // Check for the resize handle at each corner
+            if (mouseX >= (rect.x * scaleX + rect.width * scaleX - resizeThreshold) &&
+                mouseX <= (rect.x * scaleX + rect.width * scaleX) &&
+                mouseY >= (rect.y * scaleY + rect.height * scaleY - resizeThreshold) &&
+                mouseY <= (rect.y * scaleY + rect.height * scaleY)) {
+                return "se-resize"; // 右下角
+            } else if (mouseX >= (rect.x * scaleX) &&
+                mouseX <= (rect.x * scaleX + resizeThreshold) &&
+                mouseY >= (rect.y * scaleY + rect.height * scaleY - resizeThreshold) &&
+                mouseY <= (rect.y * scaleY + rect.height * scaleY)) {
+                return "sw-resize"; // 左下角
+            } else if (mouseX >= (rect.x * scaleX + rect.width * scaleX - resizeThreshold) &&
+                mouseX <= (rect.x * scaleX + rect.width * scaleX) &&
+                mouseY >= (rect.y * scaleY) &&
+                mouseY <= (rect.y * scaleY + resizeThreshold)) {
+                return "ne-resize"; // 右上角
+            } else if (mouseX >= (rect.x * scaleX) &&
+                mouseX <= (rect.x * scaleX + resizeThreshold) &&
+                mouseY >= (rect.y * scaleY) &&
+                mouseY <= (rect.y * scaleY + resizeThreshold)) {
+                return "nw-resize"; // 左上角
+            }
+            return null;
+        }
+        // Get cursor style based on resize handle type
+        function getCursorStyle(handleType) {
+            switch (handleType) {
+                case 'top-left':
+                case 'bottom-right':
+                    return 'nwse-resize';
+                case 'top-right':
+                case 'bottom-left':
+                    return 'nesw-resize';
+                case 'left':
+                case 'right':
+                    return 'ew-resize';
+                case 'top':
+                case 'bottom':
+                    return 'ns-resize';
+                default:
+                    return 'auto';
+            }
+        }
+        function saveToServer(buttonId) {
+            var view_name = document.getElementById('vertical_program_name').innerText;
+            var rectanglesToSave = rectangles.map(function (rect) {
+                return {
+                    name: rect.name,
+                    x: rect.x,
+                    y: rect.y,
+                    width: rect.width,
+                    height: rect.height,
+                    color: rect.color,
+                    id: rect.id,
+                    program_name: view_name,
+                    src: rect.src
+                };
+            });
+            fetch('/save_and_generate_xml', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ program_name: view_name, rectangles: rectanglesToSave }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function drawRectangles(rectangles) {
+            ctx1.clearRect(0, 0, layout_canvas.width, layout_canvas.height); // Clear canvas
+            rectangles.forEach(function (rect) {
+                ctx1.fillStyle = rect.color;
+                ctx1.fillRect(rect.x, rect.y, rect.width, rect.height);
+                ctx1.font = "bold 14px Arial";
+                ctx1.fillStyle = "yellow";
+                ctx1.textAlign = "center"; // 文本水平居中
+                ctx1.textBaseline = "middle"; // 文本垂直居中
+                // 计算文本的位置
+                var textX = rect.x + rect.width / 2;
+                var textY = rect.y + rect.height / 2;
+
+                ctx1.fillText(rect.name, textX, textY); // 绘制按钮文本
+                ctx1.fillStyle = "black";
+                ctx1.fillRect(rect.x + rect.width - resizeHandleSize, rect.y + rect.height - resizeHandleSize, resizeHandleSize, resizeHandleSize);
+            });
+            layout_canvas.rectangles = rectangles;
+        }
+
+        // Function to fetch rectangles from server
+        function fetchRectangles(programName) {
+            fetch(`/rectangles/${programName}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Retrieved rectangles:', data);
+                    if (data.length > 0) {
+                        rectangles = data; // 用獲取的矩形資料替換現有的矩形
+                        drawRectangles(rectangles);
+                    } else {
+                        // 如果沒有資料，允許繪製新矩形
+                        console.log('No rectangles found. You can draw new rectangles.');
+                        rectangles = []; // 初始化為空的矩形數組
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching rectangles:', error);
+                });
+        }
+        function getMousePos(layout_canvas, evt) {
+            var rect = layout_canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        function isInsideRect(pos, rect) {
+            return pos.x > rect.x && pos.x < rect.x + rect.width && pos.y > rect.y && pos.y < rect.y + rect.height;
+        }
+        function isInsideResizeHandle(pos, rect) {
+            return pos.x >= rect.x + rect.width - resizeHandleSize &&
+                pos.y >= rect.y + rect.height - resizeHandleSize &&
+                pos.x <= rect.x + rect.width &&
+                pos.y <= rect.y + rect.height;
+        }
+
+        layout_canvas.addEventListener('mousedown', function (evt) {
+            var mousePos = getMousePos(layout_canvas, evt);
+            //var rectangles = layout_canvas.rectangles || [];
+            rectangles.forEach(function (rect) {
+                if (isInsideResizeHandle(mousePos, rect)) {
+                    selectedRect = rect;
+                    isResizing = true;
+                    offsetX = mousePos.x - (rect.x + rect.width);
+                    offsetY = mousePos.y - (rect.y + rect.height);
+                } else if (isInsideRect(mousePos, rect)) {
+                    selectedRect = rect;
+                    isResizing = false;
+                    offsetX = mousePos.x - rect.x;
+                    offsetY = mousePos.y - rect.y;
+                    selectRectangle(evt);
+                }
+            });
+            if (selectedRect) {
+                layout_canvas.addEventListener('mousemove', handleDrag);
+                layout_canvas.addEventListener('mouseup', endDrag);
+            }
+        });
+        layout_canvas.addEventListener('mousemove', function (evt) {
+            if (selectedRect) {
+                var mousePos = getMousePos(layout_canvas, evt);
+
+                if (isResizing) {
+                    // Calculate new size
+                    var newWidth = mousePos.x - selectedRect.x;
+                    var newHeight = mousePos.y - selectedRect.y;
+                    // Ensure the rectangle stays within canvas boundaries
+                    newWidth = Math.max(resizeHandleSize, Math.min(newWidth, layout_canvas.width - selectedRect.x));
+                    newHeight = Math.max(resizeHandleSize, Math.min(newHeight, layout_canvas.height - selectedRect.y));
+                    selectedRect.width = newWidth;
+                    selectedRect.height = newHeight;
+                    // Update the HTML elements with new dimensions
+                    document.getElementById('nW').value = (selectedRect.width * (1080 / 254)).toFixed(0);
+                    document.getElementById('nH').value = (selectedRect.height * (1920 / 451)).toFixed(0);
+                    redrawCanvas();
+                } else if (selectedRect) {
+                    handleDrag(evt);
+                }
+            }
+        });
+        layout_canvas.addEventListener('mouseup', function () {
+            selectedRect = null;
+            isResizing = false;
+        });
+        function loadXMLfile() {
+            clearPreviousContent();
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Parse and process XML content
+                    console.log("XML Loaded Successfully:");
+                    console.log(this.responseXML);
+                    drawFileRect(this.responseXML); // Pass responseXML to drawRectangles function
+                } else if (this.readyState == 4 && this.status != 200) {
+                    console.error("Failed to load XML. Status:", this.status);
+                }
+            };
+            var checkbox = document.querySelector('input[name="interact-checkbox"]:checked');
+            if (checkbox) {
+                var program_name = checkbox.dataset.interactName;
+                var url = '/load-xml/' + program_name; // Construct the correct URL
+
+                console.log("Loading XML from:", url);
+                xhr.open('GET', url, true);
+                xhr.send();
+            } else {
+                alert("Please select a program.");
+            }
+        }
+        function clearPreviousContent() {
+            var canvas = document.getElementById("element_canvas");
+            var ctx1 = canvas.getContext("2d");
+            // 清空画布
+            ctx1.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 清除所有视频元素
+            var existingVideos = document.querySelectorAll('video');
+            existingVideos.forEach(function (video) {
+                // 停止播放视频
+                video.pause();
+                video.src = ""; // 清空视频源
+                video.load();  // 重新加载视频
+                // 从 DOM 中移除视频元素
+                if (video.parentNode) {
+                    video.parentNode.removeChild(video);
+                }
+            });
+
+            // 清空矩形数据
+            rectsArray = [];
+        }
+        //var canvas = document.getElementById("element_canvas");
+        //var ctx1 = canvas.getContext("2d");
+        var rectsArray = [];
+        var rect = {};
+        const modal1 = document.getElementById('modal1');
+        const fileInput = document.getElementById('fileInput1');
+        let video = null;
+        let animationId = null;
+        function drawFileRect(xmlDoc) {
+            var canvas = document.getElementById("element_canvas");
+            var ctx1 = canvas.getContext("2d");
+            canvas.width = 254;  // 设置画布大小
+            canvas.height = 451;
+
+            var programs = xmlDoc.getElementsByTagName('program');
+
+            for (var i = 0; i < programs.length; i++) {
+                var program = programs[i];
+                var buttons = program.children;
+
+                for (var j = 0; j < buttons.length; j++) {
+                    var button = buttons[j];
+                    var rect = {
+                        id: button.nodeName,
+                        name: button.getAttribute("name"),
+                        x: parseFloat(button.getAttribute("x")),
+                        y: parseFloat(button.getAttribute("y")),
+                        width: parseFloat(button.getAttribute("width")),
+                        height: parseFloat(button.getAttribute("height")),
+                        src: button.getAttribute("src"),
+                        fileType: determineFileType(button.nodeName)
+                    };
+
+                    // 保存矩形数据
+                    rectsArray.push(rect);
+
+                    // 处理素材
+                    if (rect.src && rect.src.trim() !== "") {
+                        if (rect.fileType === "image") {
+                            drawImage(ctx1, rect);
+                        } else if (rect.fileType === "video") {
+                            drawVideo(ctx1, rect);
+                        }
+                    } else {
+                        switch (rect.id) {
+                            case 'imagerect':
+                                ctx1.fillStyle = "#C78F7F";
+                                break;
+                            case 'videorect':
+                                ctx1.fillStyle = "#7F7FFF";
+                                break;
+                            case 'textrect':
+                                ctx1.fillStyle = "#C70000";
+                                break;
+                            case 'timerect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_text_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_logo_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_title_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'weather_temperature_rect':
+                                ctx1.fillStyle = "red";
+                                break;
+                            case 'logorect':
+                                ctx1.fillStyle = "#C74040";
+                                break;
+                            case 'broadcastrect':
+                                ctx1.fillStyle = "#C74020";
+                                break;
+                            case 'webrect':
+                                ctx1.fillStyle = "#C76250";
+                                break;
+                            default:
+                                ctx1.fillStyle = "#000000";
+                        }
+
+                        // 绘制矩形
+                        ctx1.fillRect(rect.x, rect.y, rect.width, rect.height);
+
+                        // 绘制文本
+                        ctx1.fillStyle = "yellow";
+                        ctx1.font = "12px Arial";
+                        ctx1.textAlign = "center";
+                        ctx1.textBaseline = "middle";
+                        ctx1.fillText(rect.name, rect.x + rect.width / 2, rect.y + rect.height / 2);
+                    }
+
+                    console.log(rectsArray);  // 调试用
+                }
+            }
+
+            canvas.addEventListener('click', handleCanvasClick);
+        }
+        function drawImage(ctx, rect) {
+            var img = new Image();
+            img.onload = function () {
+                ctx.drawImage(img, rect.x, rect.y, rect.width, rect.height);
+            };
+            img.src = rect.src;
+        }
+
+        // 處理影片的函數
+        function drawVideo(ctx, rect) {
+            let video = document.createElement("video");
+            video.src = rect.src;
+            video.autoplay = true;
+            video.loop = true;
+            video.muted = true;  // 静音以避免自动播放的限制
+            video.play();  // 隱藏video元素本身，只在canvas上顯示
+
+            video.addEventListener('play', function () {
+                function drawVideoToCanvas() {
+                    if (!video.paused && !video.ended) {
+                        ctx.clearRect(rect.x, rect.y, rect.width, rect.height);  // 清除之前的帧
+                        ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height);  // 將影片的一幀繪製到canvas對應矩形
+                        requestAnimationFrame(drawVideoToCanvas);  // 持续更新画布
+                    }
+                }
+                drawVideoToCanvas();  // 开始绘制视频
+            });
+
+            // 將video元素添加到DOM中，但是隱藏起來（必要時可以操作video本身）
+            //document.body.appendChild(video);
+        }
+
+        function determineFileType(rectId) {
+            switch (rectId) {
+                case 'imagerect':
+                    return 'image';
+                case 'videorect':
+                    return 'video';
+                case 'textrect':
+                    return 'text';
+                case 'timerect':
+                    return 'time';
+                case 'weatherrect':
+                    return 'weather';
+                case 'logorect':
+                    return 'logo';
+                case 'webrect':
+                    return 'web';
+                default:
+                    return ''; // 或者根据需要设置默认的文件类型
+            }
+        }
+        function isRectClicked(rectsArray, clickX, clickY) {
+            for (let rect of rectsArray) {
+                if (clickX >= rect.x && clickX <= rect.x + rect.width &&
+                    clickY >= rect.y && clickY <= rect.y + rect.height) {
+                    return rect; // Return the clicked rectangle
+                }
+            }
+            return null; // No rectangle was clicked
+        }
+
+        function handleCanvasClick(event) {
+            var canvas = document.getElementById('element_canvas');
+            var rect = canvas.getBoundingClientRect();
+            var clickX = event.clientX - rect.left;
+            var clickY = event.clientY - rect.top;
+
+            var clickedRect = null;
+            for (var i = 0; i < rectsArray.length; i++) {
+                var rectangle = rectsArray[i];
+                if (clickX >= rectangle.x && clickX <= rectangle.x + rectangle.width &&
+                    clickY >= rectangle.y && clickY <= rectangle.y + rectangle.height) {
+                    clickedRect = rectangle;
+                    break;
+                }
+            }
+
+            if (clickedRect) {
+                //console.log("Rectangle clicked:", clickedRect);
+                showModal(clickedRect);
+            } else {
+                console.log('Clicked outside of any rectangles.');
+            }
+        }
+
+        function showModal(clickedRect) {
+            modal1.style.display = "block"; // Show the modal
+            console.log("Opening modal for:", clickedRect);
+            document.getElementById("selectedRectId1").value = clickedRect.id;
+            // Store the rectangle ID for later use
+            document.getElementById("fileInput1").setAttribute("data-rect-id", clickedRect.id);
+        }
+
+        function closeModal() {
+            modal1.style.display = 'none';
+        }
+        function saveToSrc() {
+            var fileInput1 = document.getElementById('fileInput1');
+            var selectedRectId1 = document.getElementById('selectedRectId1').value; // 获取矩形 ID
+            var programName = document.getElementById('program_content').innerText; // 获取当前节目名称
+            var rectId = fileInput.getAttribute("data-rect-id");
+            
+            if (fileInput1.files.length === 0) {
+                alert("请选择一个文件！");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('rectId1', rectId);
+            formData.append('programName', programName);
+            
+            fetch("/upload-file", {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('File uploaded successfully.');
+                    } else {
+                        console.error('Upload failed:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('上传错误:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
