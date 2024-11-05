@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<config>
-<program name="划龍舟">
-<imagerect name="圖片" x="17" y="16" width="220" height="142" src=""></imagerect>
-<videorect name="影片" x="0" y="336" width="168" height="115" src=""></videorect>
-</program>
-</config>

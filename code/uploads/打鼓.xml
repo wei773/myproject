@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<config>
-<program name="打鼓">
-<videorect name="影片" x="0" y="0" width="292" height="175" src="static\uploads\7.mp4"></videorect>
-<imagerect name="圖片" x="537" y="0" width="267" height="148" src="static\uploads\13.jpg"></imagerect>
-</program>
-</config>
