@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<config>
-<program name="demo2">
-<imagerect name="圖片" x="0" y="0" width="384" height="196"></imagerect>
-<videorect name="影片" x="479" y="0" width="325" height="173"></videorect>
-<timerect name="時間" x="97" y="380" width="334" height="73"></timerect>
-</program>
-</config>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<config>
-<program name="demo">
-<textrect name="跑馬燈" x="0" y="0" width="241" height="106" src=""></textrect>
-</program>
-</config>
